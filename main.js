@@ -46,6 +46,19 @@
     });
   });
 
+  // === BANDEAU CANICULE ===
+  var bandeau = document.getElementById('bandeau-canicule');
+  var bandeauClose = document.getElementById('bandeau-canicule-close');
+  if (bandeau && bandeauClose) {
+    if (sessionStorage.getItem('bandeau-canicule-dismissed') === '1') {
+      bandeau.classList.add('hidden');
+    }
+    bandeauClose.addEventListener('click', function () {
+      bandeau.classList.add('hidden');
+      sessionStorage.setItem('bandeau-canicule-dismissed', '1');
+    });
+  }
+
   // === HEADER SCROLL EFFECT ===
   const header = document.querySelector('.header');
   if (header) {
