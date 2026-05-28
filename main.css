@@ -589,31 +589,35 @@ strong, b { color: var(--ink-800); font-weight: 600; }
 /* === LOGO TICKER (bandeau défilant partenaires) === */
 .logo-ticker-wrapper {
   overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  padding: 8px 0;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 .logo-ticker {
-  display: flex;
+  display: inline-flex;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 64px;
-  width: max-content;
+  gap: 56px;
+  padding: 0 28px;
   animation: logo-scroll 28s linear infinite;
+  will-change: transform;
 }
 .logo-ticker:hover {
   animation-play-state: paused;
 }
 .logo-ticker-item {
-  flex-shrink: 0;
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .logo-ticker-item img {
-  height: 52px;
-  width: auto;
-  max-width: 160px;
+  display: block !important;
+  height: 40px !important;
+  width: auto !important;
+  max-width: 130px !important;
   object-fit: contain;
-  filter: grayscale(100%) opacity(0.55);
+  filter: grayscale(100%) opacity(0.6);
   transition: filter 0.3s ease;
 }
 .logo-ticker-item img:hover {
