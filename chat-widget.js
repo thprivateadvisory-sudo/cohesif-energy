@@ -426,20 +426,27 @@
       if (e.key === 'Enter') { e.preventDefault(); send(inputEl.value); }
     });
 
-    // Ajuste la hauteur du panel quand le clavier mobile apparaît/disparaît
+    // Remonte le widget au-dessus du clavier iOS/Android via visualViewport
     function adjustForViewport() {
       const vv = window.visualViewport;
       if (!vv) return;
-      const availableHeight = vv.height - 24 - 80; // bottom widget offset
-      widget.style.setProperty('--cohesif-available-height', vv.height + 'px');
-      // Repositionne le widget en bas de la zone visible (au-dessus du clavier)
-      const offsetFromBottom = window.innerHeight - (vv.offsetTop + vv.height);
-      widget.style.bottom = (Math.max(offsetFromBottom, 0) + 24) + 'px';
+      // Hauteur du clavier = différence entre la fenêtre et le viewport visible
+      const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop;
+      const lift = Math.max(keyboardHeight, 0);
+      widget.style.transform = lift > 0 ? `translateY(-${lift}px)` : '';
+      // Adapte la hauteur max du panel à l'espace disponible au-dessus du widget
+      const available = vv.height - 24 - 80;
+      panel.style.maxHeight = Math.max(available, 220) + 'px';
+    }
+    function resetViewport() {
+      widget.style.transform = '';
+      panel.style.maxHeight = '';
     }
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', adjustForViewport);
       window.visualViewport.addEventListener('scroll', adjustForViewport);
     }
+    inputEl.addEventListener('blur', resetViewport);
 
     // Badge after 8s on first visit
     if (!sessionStorage.getItem('cohesif_seen')) {
