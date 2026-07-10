@@ -1,83 +1,131 @@
 /**
- * Cohesif Energy - Assistant IA "Alex"
- * Widget de chat alimenté par Claude AI (Anthropic)
- * Configuration : remplacer ANTHROPIC_API_KEY par votre clé API
+ * Cohesif Energy - Assistant "Alex" (mode FAQ local - sans API)
  */
-
 (function () {
-  const API_KEY = 'VOTRE_CLE_API_ICI'; // Remplacer par votre clé Anthropic
-
-  const SYSTEM_PROMPT = `Tu es Alex, le conseiller expert de Cohesif Energy. Tu es chaleureux, professionnel et orienté conversion.
-Tu réponds en français, de façon concise et claire. Tu aides les visiteurs à comprendre les solutions et à passer à l'action.
-
-## À propos du Groupe Cohesif
-Le Groupe Cohesif est un groupe français spécialisé dans la transition énergétique et la rénovation du bâtiment, avec 5 pôles :
-1. **Cohesif Energy** – Énergies renouvelables : panneaux solaires, bornes de recharge, pompes à chaleur
-2. **Cohesif BTP** – Rénovation globale et travaux du bâtiment
-3. **Cohesif Piscines** – Construction et rénovation de piscines
-4. **Cohesif Confort** – Climatisation, ventilation, plomberie
-5. **Cohesif Immobilier** – Gestion et transaction immobilière
-
-Siège social : 200 rue de la Croix Nivert, 75015 Paris
-SIRET : 889 287 462 00036
-Contact : cohesifenergy@gmail.com
-
-## Cohesif Energy – Solutions
-
-### 🔆 Panneaux Solaires
-- Installation de panneaux photovoltaïques pour particuliers et entreprises
-- Garantie RGE QualiPV
-- Aide disponible : MaPrimeRénov' selon les revenus
-- **Important (juin 2026)** : La prime à l'autoconsommation a été SUPPRIMÉE le 5 juin 2026
-- Tarif de rachat EDF OA : **0,011 €/kWh** pour les nouvelles demandes depuis le 5 juin 2026 (les anciens contrats conservent leur tarif de 0,04 €/kWh)
-- Avec ce tarif bas, l'autoconsommation maximale est désormais la stratégie la plus rentable
-- Les batteries de stockage sont fortement recommandées pour maximiser l'autoconsommation
-- Démarches : déclaration préalable mairie + Consuel + raccordement Enedis (sans prime autoconsommation)
-
-### 🔌 Bornes de Recharge
-
-**Pour particuliers (résidences) :**
-- Borne 7 kW en résidence principale ou secondaire
-- Crédit d'impôt : jusqu'à 500 € (75% du coût, max 300 € équipement + 200 € pose)
-- ADVENIR résidentiel : aide disponible selon profil
-
-**Pour copropriétés :**
-- Programme ADVENIR (taux avril 2026) :
-  - Infrastructure collective : jusqu'à 12 500 €
-  - Bornes individuelles : jusqu'à 1 000 €/borne
-- Aide FACE : financement complémentaire possible
-
-**Pour entreprises :**
-- Bornes pour flottes et parkings professionnels
-- Avantages fiscaux : déduction charges, amortissement accéléré
-- Exonération cotisations sociales salarié pour la recharge
-- Devis gratuit avec étude personnalisée
-
-### 🌡️ Pompes à Chaleur (PAC)
-- PAC air/eau pour chauffage et eau chaude sanitaire
-- MaPrimeRénov' 2026 (montants actuels) :
-  - Ménages très modestes : **5 000 €**
-  - Ménages modestes : **4 000 €**
-  - Ménages intermédiaires : **3 000 €**
-- CEE "Coup de Pouce" PAC : prime supplémentaire toujours active
-- Obligatoire : logement construit avant 2021, audit énergétique préalable requis
-- RGE QualiPAC obligatoire → Cohesif Energy est certifié
-
-## Conseils de conversion
-- Toujours proposer le devis gratuit et sans engagement
-- Mettre en avant les aides financières disponibles
-- Insister sur l'économie sur la facture d'énergie
-- Rassurer sur l'installation clé en main par des experts certifiés RGE
-- Si la question dépasse ton domaine, diriger vers cohesifenergy@gmail.com
-
-## Format de réponses
-- Réponses courtes et percutantes (3-6 phrases max)
-- Utilise des emojis avec parcimonie pour aérer
-- Termine souvent par une invitation à demander un devis ou à poser une autre question
-- Ne jamais inventer de prix ou de chiffres non fournis ci-dessus`;
 
   const BRAND_GREEN = '#0f7c4a';
   const BRAND_LIGHT = '#e8f5ee';
+
+  const FAQ = [
+    {
+      keys: ['prime','autoconsommation','aide solaire','subvention solaire'],
+      q: 'Quelles aides pour les panneaux solaires ?',
+      a: 'La prime à l\'autoconsommation a été supprimée le 5 juin 2026. Aujourd\'hui les aides disponibles sont MaPrimeRénov\' et les CEE selon votre profil. Demandez votre devis gratuit, on calcule tout pour vous ! 🌞'
+    },
+    {
+      keys: ['prix panneau','coût solaire','tarif solaire','combien solaire','quel prix solaire','panneau solaire prix'],
+      q: 'Quel est le prix des panneaux solaires ?',
+      a: 'Le prix dépend de la puissance installée et de votre toiture. En général entre 8 000 € et 20 000 € pour un particulier, avec des aides qui réduisent votre reste à charge. Demandez un devis gratuit pour une estimation personnalisée ! 📋'
+    },
+    {
+      keys: ['panneau solaire','solaire','photovoltaïque','photovoltaique'],
+      q: 'Comment fonctionnent les panneaux solaires ?',
+      a: 'Nos panneaux photovoltaïques convertissent la lumière du soleil en électricité. Vous consommez l\'énergie produite directement et réduisez votre facture. Avec une batterie de stockage, vous maximisez votre autonomie. Installation certifiée RGE QualiPV. ☀️'
+    },
+    {
+      keys: ['edf','rachat','revente','tarif rachat','injection'],
+      q: 'Quel est le tarif de rachat EDF ?',
+      a: 'Depuis le 5 juin 2026, le tarif de rachat EDF OA est de 0,011 €/kWh pour les nouvelles installations. C\'est pourquoi l\'autoconsommation maximale avec batterie est aujourd\'hui la stratégie la plus rentable. 💡'
+    },
+    {
+      keys: ['batterie','stockage','autonomie'],
+      q: 'Faut-il une batterie de stockage ?',
+      a: 'Avec le nouveau tarif de rachat à 0,011 €/kWh, la batterie est fortement recommandée. Elle vous permet de stocker l\'énergie produite le jour pour la consommer le soir, et maximise votre retour sur investissement. 🔋'
+    },
+    {
+      keys: ['borne recharge','borne électrique','voiture électrique','ve','irve'],
+      q: 'Quelles bornes de recharge proposez-vous ?',
+      a: 'Nous installons des bornes de recharge pour particuliers, copropriétés et entreprises. Bornes 7 kW à 22 kW selon vos besoins. Des aides ADVENIR et crédits d\'impôt sont disponibles selon votre situation. 🔌'
+    },
+    {
+      keys: ['borne particulier','maison individuelle','résidence principale','credit impot borne'],
+      q: 'Borne recharge pour particulier : quelles aides ?',
+      a: 'Pour une borne en résidence principale ou secondaire, vous bénéficiez d\'un crédit d\'impôt jusqu\'à 500 € (75% du coût). Installation rapide et certifiée par nos techniciens. 🏠'
+    },
+    {
+      keys: ['borne copropriété','copropriete','immeuble','résidents'],
+      q: 'Borne recharge en copropriété ?',
+      a: 'Le programme ADVENIR (taux avril 2026) finance jusqu\'à 12 500 € pour l\'infrastructure collective et 1 000 € par borne individuelle. Nous gérons toutes les démarches avec le syndic. 🏢'
+    },
+    {
+      keys: ['borne entreprise','parking professionnel','flotte'],
+      q: 'Bornes de recharge pour entreprise ?',
+      a: 'Pour les entreprises, nous installons des bornes pour flottes et parkings. Avantages fiscaux, déductions charges, amortissement accéléré. Étude personnalisée gratuite avec chiffrage complet. 🏭'
+    },
+    {
+      keys: ['pompe à chaleur','pac','pompe a chaleur','chauffage','climatisation'],
+      q: 'Quelles aides pour une pompe à chaleur ?',
+      a: 'MaPrimeRénov\' 2026 : jusqu\'à 5 000 € pour les ménages très modestes, 4 000 € pour les ménages modestes, 3 000 € pour les ménages intermédiaires. CEE Coup de Pouce PAC toujours actif en complément ! 🌡️'
+    },
+    {
+      keys: ['maprimerenov','mpr','maprime'],
+      q: 'Comment fonctionne MaPrimeRénov\' ?',
+      a: 'MaPrimeRénov\' est une aide de l\'État calculée selon vos revenus. Pour une PAC air/eau : 3 000 € à 5 000 € selon votre foyer. Cohesif Energy gère le dossier pour vous, de A à Z. 📄'
+    },
+    {
+      keys: ['rge','qualipv','qualipac','certification','certifié'],
+      q: 'Êtes-vous certifiés RGE ?',
+      a: 'Oui, Cohesif Energy est certifié RGE QualiPV (solaire) et QualiPAC (pompes à chaleur). Cette certification est obligatoire pour accéder aux aides de l\'État. Vous êtes entre de bonnes mains ! ✅'
+    },
+    {
+      keys: ['groupe cohesif','cohesif btp','cohesif piscine','cohesif confort','cohesif immobilier','groupe'],
+      q: 'C\'est quoi le Groupe Cohesif ?',
+      a: 'Le Groupe Cohesif est un groupe français de transition énergétique avec 5 pôles : Cohesif Energy (solaire, bornes, PAC), Cohesif BTP (rénovation), Cohesif Piscines, Cohesif Confort (clim, plomberie) et Cohesif Immobilier. Un interlocuteur unique pour tous vos projets ! 🏗️'
+    },
+    {
+      keys: ['délai','installation','durée travaux','quand'],
+      q: 'Quel est le délai d\'installation ?',
+      a: 'En général 4 à 8 semaines entre la signature et l\'installation, selon les démarches administratives et notre planning. Nous vous tenons informé à chaque étape. 📅'
+    },
+    {
+      keys: ['garantie','sav','après-vente','maintenance'],
+      q: 'Quelle garantie sur les installations ?',
+      a: 'Nos installations bénéficient des garanties fabricant (10 à 25 ans sur les panneaux, 5 à 10 ans sur les onduleurs) et de notre garantie main d\'œuvre. SAV réactif assuré par Cohesif Energy. 🛡️'
+    },
+    {
+      keys: ['devis','gratuit','contact','rendez-vous','rdv','rappel'],
+      q: 'Comment obtenir un devis gratuit ?',
+      a: 'Notre devis est 100% gratuit et sans engagement ! Remplissez le formulaire sur notre page Contact, ou appelez-nous. Un conseiller vous rappelle sous 24h pour une étude personnalisée. 📞'
+    },
+    {
+      keys: ['aides','subvention','financement','crédit','pret','prêt'],
+      q: 'Quelles aides financières sont disponibles ?',
+      a: 'Selon votre projet : MaPrimeRénov\', CEE Coup de Pouce, crédit d\'impôt borne de recharge, programme ADVENIR. Nous optimisons toutes les aides disponibles pour maximiser votre économie. Notre équipe gère les dossiers pour vous ! 💰'
+    },
+    {
+      keys: ['bonjour','salut','hello','bonsoir','coucou'],
+      q: '',
+      a: 'Bonjour ! 😊 Je suis Alex, votre conseiller Cohesif Energy. Je peux vous renseigner sur nos panneaux solaires, bornes de recharge, pompes à chaleur et les aides financières disponibles. Comment puis-je vous aider ?'
+    },
+    {
+      keys: ['merci','super','parfait','nickel','top'],
+      q: '',
+      a: 'Avec plaisir ! N\'hésitez pas si vous avez d\'autres questions. Et si vous souhaitez aller plus loin, demandez votre devis gratuit — c\'est sans engagement ! 🌿'
+    },
+  ];
+
+  const DEFAULT_REPLY = "Je ne suis pas sûr de comprendre votre question. Pour une réponse précise, contactez-nous à cohesifenergy@gmail.com ou demandez votre <a href='contact-devis.html' style='color:#0f7c4a;font-weight:600'>devis gratuit</a> — un conseiller vous rappelle sous 24h ! 📞";
+
+  const SUGGESTIONS = [
+    "💰 Aides disponibles en 2026 ?",
+    "☀️ Prix panneaux solaires ?",
+    "🔌 Borne copropriété",
+    "🌡️ Pompe à chaleur",
+    "📋 Devis gratuit",
+  ];
+
+  function findAnswer(text) {
+    const t = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    for (const item of FAQ) {
+      if (item.keys.some(k => {
+        const kn = k.normalize('NFD').replace(/[̀-ͯ]/g, '');
+        return t.includes(kn);
+      })) {
+        return item.a;
+      }
+    }
+    return null;
+  }
 
   const CSS = `
     #cohesif-chat-widget * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
@@ -127,7 +175,7 @@ Contact : cohesifenergy@gmail.com
 
     #cohesif-header {
       background: ${BRAND_GREEN}; padding: 16px 18px;
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 12px; flex-shrink: 0;
     }
     #cohesif-avatar-wrap {
       width: 44px; height: 44px; border-radius: 50%; overflow: hidden;
@@ -135,7 +183,7 @@ Contact : cohesifenergy@gmail.com
     }
     #cohesif-header-text { flex: 1; }
     #cohesif-header-name { color: #fff; font-weight: 700; font-size: 15px; }
-    #cohesif-header-status { color: rgba(255,255,255,0.8); font-size: 12px; display: flex; align-items: center; gap: 4px; }
+    #cohesif-header-status { color: rgba(255,255,255,0.85); font-size: 12px; display: flex; align-items: center; gap: 5px; }
     #cohesif-header-status::before { content: ''; width: 7px; height: 7px; background: #4ade80; border-radius: 50%; display: inline-block; }
     #cohesif-close {
       background: none; border: none; color: rgba(255,255,255,0.8);
@@ -151,47 +199,47 @@ Contact : cohesifenergy@gmail.com
     #cohesif-messages::-webkit-scrollbar { width: 4px; }
     #cohesif-messages::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
 
-    .cohesif-msg { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
+    .cohesif-msg { display: flex; gap: 8px; align-items: flex-end; }
     .cohesif-msg.user { flex-direction: row-reverse; }
     .cohesif-msg-avatar {
       width: 28px; height: 28px; border-radius: 50%; overflow: hidden;
-      background: ${BRAND_GREEN}; flex-shrink: 0;
+      flex-shrink: 0;
     }
     .cohesif-msg-bubble {
-      padding: 10px 13px; border-radius: 16px; font-size: 14px; line-height: 1.45;
+      padding: 10px 13px; border-radius: 16px; font-size: 14px; line-height: 1.5;
       max-width: calc(100% - 42px); word-break: break-word;
     }
     .cohesif-msg.bot .cohesif-msg-bubble { background: ${BRAND_LIGHT}; color: #1a1a1a; border-bottom-left-radius: 4px; }
     .cohesif-msg.user .cohesif-msg-bubble { background: ${BRAND_GREEN}; color: #fff; border-bottom-right-radius: 4px; }
 
-    .cohesif-typing { display: flex; gap: 4px; padding: 12px 14px; }
+    .cohesif-typing { display: flex; gap: 4px; padding: 12px 14px; align-items: center; }
     .cohesif-typing span {
       width: 7px; height: 7px; background: #aaa; border-radius: 50%;
-      animation: cohesif-bounce 1.2s infinite;
+      animation: cohesif-bounce 1.1s infinite;
     }
-    .cohesif-typing span:nth-child(2) { animation-delay: 0.2s; }
-    .cohesif-typing span:nth-child(3) { animation-delay: 0.4s; }
+    .cohesif-typing span:nth-child(2) { animation-delay: 0.18s; }
+    .cohesif-typing span:nth-child(3) { animation-delay: 0.36s; }
     @keyframes cohesif-bounce {
       0%, 60%, 100% { transform: translateY(0); }
       30% { transform: translateY(-6px); }
     }
 
-    #cohesif-suggestions { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+    #cohesif-suggestions { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
     .cohesif-suggestion {
       background: ${BRAND_LIGHT}; color: ${BRAND_GREEN}; border: 1px solid rgba(15,124,74,0.25);
       border-radius: 20px; padding: 5px 12px; font-size: 12px; cursor: pointer;
       transition: background 0.15s; white-space: nowrap;
     }
-    .cohesif-suggestion:hover { background: #d1ead9; }
+    .cohesif-suggestion:hover { background: #c8e6d4; }
 
     #cohesif-input-row {
       border-top: 1px solid #f0f0f0; padding: 12px 14px;
-      display: flex; gap: 8px; align-items: center;
+      display: flex; gap: 8px; align-items: center; flex-shrink: 0;
     }
     #cohesif-input {
       flex: 1; border: 1.5px solid #e0e0e0; border-radius: 22px;
       padding: 9px 14px; font-size: 14px; outline: none;
-      transition: border-color 0.15s; resize: none; max-height: 80px;
+      transition: border-color 0.15s;
     }
     #cohesif-input:focus { border-color: ${BRAND_GREEN}; }
     #cohesif-send {
@@ -201,9 +249,8 @@ Contact : cohesifenergy@gmail.com
       flex-shrink: 0; transition: background 0.15s;
     }
     #cohesif-send:hover { background: #0a6038; }
-    #cohesif-send:disabled { background: #ccc; cursor: default; }
 
-    #cohesif-footer { text-align: center; padding: 6px 0 10px; font-size: 10px; color: #bbb; }
+    #cohesif-footer { text-align: center; padding: 6px 0 10px; font-size: 10px; color: #bbb; flex-shrink: 0; }
 
     @media (max-width: 480px) {
       #cohesif-chat-widget { bottom: 16px; right: 16px; }
@@ -213,46 +260,28 @@ Contact : cohesifenergy@gmail.com
 
   const AVATAR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" fill="none">
     <circle cx="22" cy="22" r="22" fill="#0f7c4a"/>
-    <!-- Corps -->
     <path d="M8 44c0-8.8 6.3-16 14-16s14 7.2 14 16" fill="#0a6038"/>
-    <!-- Veste -->
     <path d="M14 30 L22 28 L30 30 L30 44 L14 44Z" fill="#1a9960"/>
-    <!-- Chemise col -->
     <path d="M19 29 L22 32 L25 29 L22 28Z" fill="#fff"/>
-    <!-- Cravate ou badge -->
-    <rect x="21" y="29" width="2" height="6" rx="1" fill="#4ade80" opacity="0.8"/>
-    <!-- Tête -->
+    <rect x="21" y="29" width="2" height="5" rx="1" fill="#4ade80" opacity="0.8"/>
     <circle cx="22" cy="16" r="9" fill="#f5c5a0"/>
-    <!-- Cheveux -->
     <path d="M13 14c0-5 4-9 9-9s9 4 9 9v1c-1-3-3-5-9-5s-8 2-9 5z" fill="#2d1b00"/>
-    <!-- Yeux -->
     <circle cx="18.5" cy="16" r="1.3" fill="#2d1b00"/>
     <circle cx="25.5" cy="16" r="1.3" fill="#2d1b00"/>
     <circle cx="19" cy="15.5" r="0.4" fill="#fff"/>
     <circle cx="26" cy="15.5" r="0.4" fill="#fff"/>
-    <!-- Sourire -->
     <path d="M18.5 19.5 Q22 22 25.5 19.5" stroke="#c47a4a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-    <!-- Nez -->
-    <ellipse cx="22" cy="18" rx="1" ry="0.6" fill="#c47a4a" opacity="0.5"/>
   </svg>`;
 
-  const AVATAR_SVG_SMALL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="none">
+  const AVATAR_SMALL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="none">
     <circle cx="14" cy="14" r="14" fill="#0f7c4a"/>
     <path d="M5 28c0-5.5 4-10 9-10s9 4.5 9 10" fill="#0a6038"/>
     <circle cx="14" cy="11" r="6" fill="#f5c5a0"/>
-    <path d="M8 9c0-3.3 2.7-6 6-6s6 2.7 6 6v.5c-.7-2-2-3.2-6-3.2S8.7 7 8 9z" fill="#2d1b00"/>
+    <path d="M8 9c0-3.3 2.7-6 6-6s6 2.7 6 6v.5c-.7-2-2-3-6-3s-5.3 1-6 2.5z" fill="#2d1b00"/>
     <circle cx="12" cy="11" r="0.9" fill="#2d1b00"/>
     <circle cx="16" cy="11" r="0.9" fill="#2d1b00"/>
     <path d="M11.5 13.5 Q14 15.5 16.5 13.5" stroke="#c47a4a" stroke-width="1" stroke-linecap="round" fill="none"/>
   </svg>`;
-
-  const SUGGESTIONS = [
-    "💰 Aides disponibles en 2026 ?",
-    "☀️ Panneaux solaires, quel prix ?",
-    "🔌 Borne recharge copropriété",
-    "🌡️ Pompe à chaleur, combien ?",
-    "📞 Obtenir un devis gratuit",
-  ];
 
   function init() {
     if (document.getElementById('cohesif-chat-widget')) return;
@@ -269,139 +298,104 @@ Contact : cohesifenergy@gmail.com
           <div id="cohesif-avatar-wrap">${AVATAR_SVG}</div>
           <div id="cohesif-header-text">
             <div id="cohesif-header-name">Alex — Conseiller Cohesif</div>
-            <div id="cohesif-header-status">En ligne · Réponse immédiate</div>
+            <div id="cohesif-header-status">En ligne · Répond instantanément</div>
           </div>
           <button id="cohesif-close" title="Fermer">✕</button>
         </div>
         <div id="cohesif-messages"></div>
         <div id="cohesif-suggestions"></div>
         <div id="cohesif-input-row">
-          <input id="cohesif-input" type="text" placeholder="Posez votre question à Alex…" autocomplete="off" maxlength="500"/>
+          <input id="cohesif-input" type="text" placeholder="Posez votre question…" autocomplete="off" maxlength="300"/>
           <button id="cohesif-send" title="Envoyer">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
             </svg>
           </button>
         </div>
-        <div id="cohesif-footer">Propulsé par Claude AI · Cohesif Energy</div>
+        <div id="cohesif-footer">Conseiller Cohesif Energy · Réponse instantanée</div>
       </div>
-      <button id="cohesif-bubble" class="pulse" title="Parler à Alex, notre conseiller">
+      <button id="cohesif-bubble" class="pulse" title="Parler à Alex">
         ${AVATAR_SVG}
         <div id="cohesif-badge" style="display:none">1</div>
       </button>
     `;
     document.body.appendChild(widget);
 
-    const panel = document.getElementById('cohesif-panel');
-    const bubble = document.getElementById('cohesif-bubble');
+    const panel    = document.getElementById('cohesif-panel');
+    const bubble   = document.getElementById('cohesif-bubble');
     const closeBtn = document.getElementById('cohesif-close');
-    const messagesEl = document.getElementById('cohesif-messages');
-    const inputEl = document.getElementById('cohesif-input');
-    const sendBtn = document.getElementById('cohesif-send');
+    const messagesEl    = document.getElementById('cohesif-messages');
+    const inputEl       = document.getElementById('cohesif-input');
+    const sendBtn       = document.getElementById('cohesif-send');
     const suggestionsEl = document.getElementById('cohesif-suggestions');
-    const badge = document.getElementById('cohesif-badge');
+    const badge         = document.getElementById('cohesif-badge');
 
-    let messages = [];
     let isOpen = false;
-    let hasUnread = false;
+    let msgCount = 0;
+
+    function scrollBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addMsg(role, html) {
+      msgCount++;
+      const el = document.createElement('div');
+      el.className = `cohesif-msg ${role === 'bot' ? 'bot' : 'user'}`;
+      const avatarEl = document.createElement('div');
+      avatarEl.className = 'cohesif-msg-avatar';
+      if (role === 'bot') avatarEl.innerHTML = AVATAR_SMALL;
+      const bubbleEl = document.createElement('div');
+      bubbleEl.className = 'cohesif-msg-bubble';
+      if (role === 'bot') bubbleEl.innerHTML = html;
+      else bubbleEl.textContent = html;
+      if (role === 'bot') { el.appendChild(avatarEl); el.appendChild(bubbleEl); }
+      else { el.appendChild(bubbleEl); }
+      messagesEl.appendChild(el);
+      scrollBottom();
+    }
+
+    function showTyping() {
+      const el = document.createElement('div');
+      el.id = 'cohesif-typing-row';
+      el.className = 'cohesif-msg bot';
+      el.innerHTML = `<div class="cohesif-msg-avatar">${AVATAR_SMALL}</div><div class="cohesif-msg-bubble cohesif-typing"><span></span><span></span><span></span></div>`;
+      messagesEl.appendChild(el);
+      scrollBottom();
+    }
+
+    function hideTyping() {
+      const el = document.getElementById('cohesif-typing-row');
+      if (el) el.remove();
+    }
 
     function showSuggestions() {
       suggestionsEl.innerHTML = '';
-      if (messages.length > 2) return;
+      if (msgCount > 4) return;
       SUGGESTIONS.forEach(s => {
         const btn = document.createElement('button');
         btn.className = 'cohesif-suggestion';
         btn.textContent = s;
-        btn.addEventListener('click', () => { sendMessage(s); suggestionsEl.innerHTML = ''; });
+        btn.addEventListener('click', () => { send(s); });
         suggestionsEl.appendChild(btn);
       });
     }
 
-    function addMessage(role, text) {
-      messages.push({ role, content: text });
-      const msgEl = document.createElement('div');
-      msgEl.className = `cohesif-msg ${role === 'assistant' ? 'bot' : 'user'}`;
-      const avatarEl = document.createElement('div');
-      avatarEl.className = 'cohesif-msg-avatar';
-      if (role === 'assistant') avatarEl.innerHTML = AVATAR_SVG_SMALL;
-      const bubbleEl = document.createElement('div');
-      bubbleEl.className = 'cohesif-msg-bubble';
-      bubbleEl.textContent = text;
-      if (role === 'assistant') {
-        msgEl.appendChild(avatarEl);
-        msgEl.appendChild(bubbleEl);
-      } else {
-        msgEl.appendChild(bubbleEl);
-      }
-      messagesEl.appendChild(msgEl);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-
-    function addTyping() {
-      const el = document.createElement('div');
-      el.className = 'cohesif-msg bot';
-      el.id = 'cohesif-typing';
-      el.innerHTML = `<div class="cohesif-msg-avatar">${AVATAR_SVG_SMALL}</div><div class="cohesif-msg-bubble cohesif-typing"><span></span><span></span><span></span></div>`;
-      messagesEl.appendChild(el);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-
-    function removeTyping() {
-      const el = document.getElementById('cohesif-typing');
-      if (el) el.remove();
-    }
-
-    async function sendMessage(text) {
+    function send(text) {
       text = text.trim();
       if (!text) return;
       inputEl.value = '';
-      sendBtn.disabled = true;
       suggestionsEl.innerHTML = '';
-      addMessage('user', text);
-      addTyping();
-
-      try {
-        const apiMessages = messages.slice(0, -1).concat([{ role: 'user', content: text }]);
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': API_KEY,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true',
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5',
-            max_tokens: 512,
-            system: SYSTEM_PROMPT,
-            messages: apiMessages.map(m => ({ role: m.role, content: m.content })),
-          }),
-        });
-
-        removeTyping();
-
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error?.message || `HTTP ${res.status}`);
-        }
-
-        const data = await res.json();
-        const reply = data.content?.[0]?.text || "Je n'ai pas pu générer de réponse. Veuillez réessayer.";
-        addMessage('assistant', reply);
-
+      addMsg('user', text);
+      showTyping();
+      setTimeout(() => {
+        hideTyping();
+        const answer = findAnswer(text) || DEFAULT_REPLY;
+        addMsg('bot', answer);
+        showSuggestions();
         if (!isOpen) {
-          hasUnread = true;
           badge.style.display = 'flex';
         }
-      } catch (err) {
-        removeTyping();
-        console.error('[Cohesif Chat]', err);
-        addMessage('assistant', "Désolé, je rencontre un problème technique. Contactez-nous directement à cohesifenergy@gmail.com ou demandez un devis sur notre site. 😊");
-      }
-
-      sendBtn.disabled = false;
-      inputEl.focus();
-      showSuggestions();
+      }, 600 + Math.random() * 400);
     }
 
     function open() {
@@ -409,12 +403,11 @@ Contact : cohesifenergy@gmail.com
       panel.classList.add('open');
       bubble.classList.remove('pulse');
       badge.style.display = 'none';
-      hasUnread = false;
-      if (messages.length === 0) {
+      if (msgCount === 0) {
         setTimeout(() => {
-          addMessage('assistant', "Bonjour ! 👋 Je suis Alex, votre conseiller Cohesif Energy. Je peux répondre à toutes vos questions sur nos solutions solaires, bornes de recharge, pompes à chaleur et les aides financières disponibles. Comment puis-je vous aider ?");
+          addMsg('bot', "Bonjour ! 👋 Je suis Alex, votre conseiller Cohesif Energy. Je peux vous renseigner sur nos panneaux solaires, bornes de recharge, pompes à chaleur et toutes les aides disponibles. Comment puis-je vous aider ?");
           showSuggestions();
-        }, 300);
+        }, 250);
       }
       inputEl.focus();
     }
@@ -422,24 +415,21 @@ Contact : cohesifenergy@gmail.com
     function close() {
       isOpen = false;
       panel.classList.remove('open');
-      if (messages.length > 0) bubble.classList.remove('pulse');
     }
 
     bubble.addEventListener('click', () => isOpen ? close() : open());
     closeBtn.addEventListener('click', close);
-
-    sendBtn.addEventListener('click', () => sendMessage(inputEl.value));
+    sendBtn.addEventListener('click', () => send(inputEl.value));
     inputEl.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(inputEl.value); }
+      if (e.key === 'Enter') { e.preventDefault(); send(inputEl.value); }
     });
 
-    // Auto-open hint after 8 seconds on first visit
-    if (!sessionStorage.getItem('cohesif_chat_seen')) {
+    // Badge after 8s on first visit
+    if (!sessionStorage.getItem('cohesif_seen')) {
       setTimeout(() => {
         if (!isOpen) {
           badge.style.display = 'flex';
-          hasUnread = true;
-          sessionStorage.setItem('cohesif_chat_seen', '1');
+          sessionStorage.setItem('cohesif_seen', '1');
         }
       }, 8000);
     }
