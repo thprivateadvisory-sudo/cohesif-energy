@@ -68,9 +68,9 @@
       a: 'Oui, Cohesif Energy est certifié RGE QualiPV (solaire) et QualiPAC (pompes à chaleur). Cette certification est obligatoire pour accéder aux aides de l\'État. Vous êtes entre de bonnes mains ! ✅'
     },
     {
-      keys: ['groupe cohesif','cohesif btp','cohesif piscine','cohesif confort','cohesif immobilier','groupe'],
+      keys: ['groupe cohesif','cohesif btp','cohesif auto','cohesif commerce','cohesif sport','cohesif agro','cohesif negoce','cohesif négoce','cohesif access','groupe'],
       q: 'C\'est quoi le Groupe Cohesif ?',
-      a: 'Le Groupe Cohesif est un groupe français de transition énergétique avec 5 pôles : Cohesif Energy (solaire, bornes, PAC), Cohesif BTP (rénovation), Cohesif Piscines, Cohesif Confort (clim, plomberie) et Cohesif Immobilier. Un interlocuteur unique pour tous vos projets ! 🏗️'
+      a: 'Le Groupe Cohesif est un groupe français multi-métiers avec 8 pôles : Cohesif Energy (solaire, bornes, PAC), Cohesif BTP (rénovation), Cohesif Auto, Cohesif Commerce, Cohesif Sport, Cohesif Agro, Cohesif Négoce et Cohesif Access. Un interlocuteur unique pour tous vos projets ! 🏗️'
     },
     {
       keys: ['délai','installation','durée travaux','quand'],
