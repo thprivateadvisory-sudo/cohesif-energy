@@ -164,7 +164,8 @@
       background: #fff; border-radius: 20px;
       box-shadow: 0 12px 48px rgba(0,0,0,0.18);
       display: none; flex-direction: column;
-      overflow: hidden; max-height: 520px;
+      overflow: hidden;
+      height: 520px; max-height: calc(var(--cohesif-available-height, 100vh) - 120px);
       animation: cohesif-slide-up 0.25s ease;
     }
     @keyframes cohesif-slide-up {
@@ -235,6 +236,7 @@
     #cohesif-input-row {
       border-top: 1px solid #f0f0f0; padding: 12px 14px;
       display: flex; gap: 8px; align-items: center; flex-shrink: 0;
+      position: sticky; bottom: 0; background: #fff;
     }
     #cohesif-input {
       flex: 1; border: 1.5px solid #e0e0e0; border-radius: 22px;
@@ -423,6 +425,21 @@
     inputEl.addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); send(inputEl.value); }
     });
+
+    // Ajuste la hauteur du panel quand le clavier mobile apparaît/disparaît
+    function adjustForViewport() {
+      const vv = window.visualViewport;
+      if (!vv) return;
+      const availableHeight = vv.height - 24 - 80; // bottom widget offset
+      widget.style.setProperty('--cohesif-available-height', vv.height + 'px');
+      // Repositionne le widget en bas de la zone visible (au-dessus du clavier)
+      const offsetFromBottom = window.innerHeight - (vv.offsetTop + vv.height);
+      widget.style.bottom = (Math.max(offsetFromBottom, 0) + 24) + 'px';
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', adjustForViewport);
+      window.visualViewport.addEventListener('scroll', adjustForViewport);
+    }
 
     // Badge after 8s on first visit
     if (!sessionStorage.getItem('cohesif_seen')) {
