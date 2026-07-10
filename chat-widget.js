@@ -426,19 +426,25 @@
       if (e.key === 'Enter') { e.preventDefault(); send(inputEl.value); }
     });
 
-    // Remonte le widget au-dessus du clavier iOS/Android via visualViewport
+    // Positionne le widget juste au-dessus du clavier iOS/Android
     function adjustForViewport() {
       const vv = window.visualViewport;
       if (!vv) return;
-      // Hauteur du clavier = différence entre la fenêtre et le viewport visible
-      const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop;
-      const lift = Math.max(keyboardHeight, 0);
-      widget.style.transform = lift > 0 ? `translateY(-${lift}px)` : '';
-      // Adapte la hauteur max du panel à l'espace disponible au-dessus du widget
-      const available = vv.height - 24 - 80;
-      panel.style.maxHeight = Math.max(available, 220) + 'px';
+      const keyboardHeight = Math.max(0, window.innerHeight - vv.height);
+      if (keyboardHeight > 0) {
+        // Remonte le widget au-dessus du clavier
+        widget.style.bottom = (keyboardHeight + 24) + 'px';
+        widget.style.transform = '';
+        // Réduit le panel pour qu'il tienne dans l'espace visible
+        panel.style.maxHeight = Math.max(vv.height - 90, 200) + 'px';
+      } else {
+        widget.style.bottom = '24px';
+        widget.style.transform = '';
+        panel.style.maxHeight = '';
+      }
     }
     function resetViewport() {
+      widget.style.bottom = '24px';
       widget.style.transform = '';
       panel.style.maxHeight = '';
     }
