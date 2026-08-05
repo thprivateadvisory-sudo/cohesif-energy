@@ -147,11 +147,11 @@
       <p>Plus votre demande est précise, plus notre réponse sera adaptée. Un conseiller spécialisé vous recontacte sous 48h ouvrées.</p>
     </div>
 
-    <form style="max-width:720px;margin:0 auto;background:white;padding:32px;border-radius:16px;border:1px solid var(--ink-200);">
+    <form action="mailto:cohesifenergy@gmail.com" method="post" enctype="text/plain" style="max-width:720px;margin:0 auto;background:white;padding:32px;border-radius:16px;border:1px solid var(--ink-200);">
       <div style="display:grid;gap:20px;">
         <div>
           <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Je suis*</label>
-          <select required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;background:white;">
+          <select name="Profil" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;background:white;">
             <option value="">— Sélectionnez votre profil —</option>
             <option>Particulier (maison individuelle)</option>
             <option>Copropriétaire / Syndic</option>
@@ -163,7 +163,7 @@
 
         <div>
           <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Mon projet concerne*</label>
-          <select required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;background:white;">
+          <select name="Projet" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;background:white;">
             <option value="">— Sélectionnez votre besoin —</option>
             <option>Borne de recharge électrique</option>
             <option>Panneaux solaires</option>
@@ -178,37 +178,37 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
           <div>
             <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Prénom*</label>
-            <input type="text" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
+            <input type="text" name="Prenom" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
           </div>
           <div>
             <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Nom*</label>
-            <input type="text" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
+            <input type="text" name="Nom" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
           </div>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
           <div>
             <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Email*</label>
-            <input type="email" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
+            <input type="email" name="Email" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
           </div>
           <div>
             <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Téléphone*</label>
-            <input type="tel" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
+            <input type="tel" name="Telephone" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
           </div>
         </div>
 
         <div>
           <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Code postal (lieu du projet)*</label>
-          <input type="text" required pattern="[0-9]{5}" style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
+          <input type="text" name="CodePostal" required pattern="[0-9]{5}" style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;">
         </div>
 
         <div>
           <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Description du projet (facultatif)</label>
-          <textarea rows="4" placeholder="Ex: J'ai un véhicule Tesla Model 3, je souhaite installer une borne 7,4 kW dans mon garage, distance au tableau ~10 m..." style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;font-family:inherit;resize:vertical;"></textarea>
+          <textarea name="Description" rows="4" placeholder="Ex: J'ai un véhicule Tesla Model 3, je souhaite installer une borne 7,4 kW dans mon garage, distance au tableau ~10 m..." style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;font-family:inherit;resize:vertical;"></textarea>
         </div>
 
         <div style="display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--ink-600);">
-          <input type="checkbox" required style="margin-top:3px;">
+          <input type="checkbox" name="ConsentementRGPD" value="Oui" required style="margin-top:3px;">
           <span>J'accepte d'être recontacté par Cohesif Energy concernant ma demande. Mes données sont traitées conformément à la <a href="./politique-confidentialite.html" style="color:var(--brand-700);">politique de confidentialité</a> (RGPD).</span>
         </div>
 
@@ -259,7 +259,7 @@
       <div class="feature-card">
         <h3 style="font-size:1rem;">Suivi de production</h3>
         <p>Accès à votre espace client pour consulter vos données de production solaire et consommation.</p>
-        <p style="margin-top:16px;"><a href="#" class="btn btn-outline btn-sm">Espace client</a></p>
+        <p style="margin-top:16px;"><span class="btn btn-outline btn-block" style="opacity:0.55;cursor:not-allowed;pointer-events:none;">Bientôt disponible</span></p>
       </div>
       <div class="feature-card">
         <h3 style="font-size:1rem;">Contrat de maintenance</h3>
