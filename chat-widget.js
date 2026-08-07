@@ -215,7 +215,7 @@
                   0 0 0 1px rgba(15,124,74,0.15);
       transition: transform 0.25s, box-shadow 0.25s;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       padding: 0;
     }
     .cohesif-ai-avatar:hover {
@@ -238,6 +238,36 @@
       0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.5); }
       70%  { box-shadow: 0 0 0 10px rgba(22,163,74,0); }
       100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+    }
+
+    /* ── Chip LIVE sur le lanceur ── */
+    .cohesif-ai-live-chip {
+      position: absolute;
+      top: -3px; left: -3px;
+      background: #22c55e;
+      color: #fff;
+      font-size: 8px; font-weight: 800;
+      padding: 2px 6px 2px 5px;
+      border-radius: 8px;
+      letter-spacing: .06em;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: none; align-items: center; gap: 3px;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(34,197,94,.35);
+      z-index: 3;
+    }
+    .cohesif-ai-live-chip.visible { display: flex; }
+    .cohesif-ai-live-chip::before {
+      content: '';
+      width: 5px; height: 5px;
+      background: #fff;
+      border-radius: 50%;
+      display: inline-block;
+      animation: cohesif-ai-live-pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes cohesif-ai-live-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .5; transform: scale(.75); }
     }
 
     /* Fenêtre de chat */
@@ -294,12 +324,16 @@
       display: flex; align-items: center; gap: 6px;
       margin-top: 2px;
     }
-    .cohesif-ai-chat-status::before {
-      content: '';
+
+    /* ── Point de statut agent ── */
+    .cohesif-ai-dot {
       width: 6px; height: 6px;
       background: #4ade80;
       border-radius: 50%;
+      flex-shrink: 0;
+      transition: background .4s;
     }
+
     .cohesif-ai-chat-close {
       width: 32px; height: 32px;
       border-radius: 50%;
@@ -397,6 +431,61 @@
       border-color: ${BRAND_GREEN};
       background: ${BRAND_SOFT};
       transform: translateY(-1px);
+    }
+
+    /* ── Barre de saisie agent en direct ── */
+    .cohesif-ai-agent-input-bar {
+      display: none;
+      padding: 12px 16px;
+      border-top: 1px solid #e5e7eb;
+      background: #fff;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .cohesif-ai-agent-input-bar.active { display: flex; }
+    .cohesif-ai-agent-input {
+      flex: 1;
+      border: 1px solid #d1d5db;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color .15s;
+    }
+    .cohesif-ai-agent-input:focus { border-color: ${BRAND_GREEN}; }
+    .cohesif-ai-agent-input::placeholder { color: #9ca3af; }
+    .cohesif-ai-agent-send {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: ${BRAND_GREEN};
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .15s, transform .15s;
+    }
+    .cohesif-ai-agent-send:hover { background: #0a6038; transform: scale(1.06); }
+
+    /* ── Cartes de confirmation agent ── */
+    .cohesif-ai-agent-confirm {
+      margin-top: 8px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 11.5px;
+      line-height: 1.55;
+      font-weight: 600;
+    }
+    .cohesif-ai-agent-confirm.online {
+      background: #f0fdf4;
+      border: 1.5px solid #4ade80;
+      color: #166534;
+    }
+    .cohesif-ai-agent-confirm.offline {
+      background: #f8fafc;
+      border: 1.5px solid #94a3b8;
+      color: #475569;
     }
 
     /* Footer */
@@ -499,6 +588,7 @@
         <button class="cohesif-ai-avatar" title="Parler à Alex">
           ${AVATAR_SVG}
           <div class="cohesif-ai-avatar-status"></div>
+          <span class="cohesif-ai-live-chip" id="cohesif-ai-live-chip"></span>
         </button>
 
         <div class="cohesif-ai-chat">
@@ -506,12 +596,27 @@
             <div class="cohesif-ai-chat-mini-avatar">${AVATAR_SVG}</div>
             <div class="cohesif-ai-chat-info">
               <div class="cohesif-ai-chat-name">Alex &mdash; Conseiller Cohesif Energy</div>
-              <div class="cohesif-ai-chat-status">En ligne &middot; R&eacute;pond instantan&eacute;ment</div>
+              <div class="cohesif-ai-chat-status">
+                <span class="cohesif-ai-dot" id="cohesif-ai-agent-dot"></span>
+                <span id="cohesif-ai-status-text">En ligne &middot; R&eacute;pond instantan&eacute;ment</span>
+              </div>
             </div>
             <button class="cohesif-ai-chat-close" title="Fermer">&#x2715;</button>
           </div>
 
           <div class="cohesif-ai-chat-body"></div>
+
+          <!-- Barre de saisie agent en direct (masquée par défaut) -->
+          <div class="cohesif-ai-agent-input-bar" id="cohesif-ai-agent-input-bar">
+            <input class="cohesif-ai-agent-input" id="cohesif-ai-agent-input"
+                   type="text" placeholder="Votre pr&eacute;nom&hellip;"
+                   autocomplete="off" maxlength="100">
+            <button class="cohesif-ai-agent-send" id="cohesif-ai-agent-send" aria-label="Envoyer">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+                <path d="M15 8.5L2 2.5l3.2 6-3.2 6 13-6z" fill="white"/>
+              </svg>
+            </button>
+          </div>
 
           <div class="cohesif-ai-chat-footer">
             <div class="cohesif-ai-chat-footer-text">Propuls&eacute; par IA &middot; Cohesif Energy</div>
@@ -538,8 +643,120 @@
     const chatClose   = widget.querySelector('.cohesif-ai-chat-close');
     const chatBody    = widget.querySelector('.cohesif-ai-chat-body');
     const mobileCta   = widget.querySelector('.cohesif-mobile-sticky-cta');
+    const agentInputEl  = widget.querySelector('#cohesif-ai-agent-input');
+    const agentSendBtn  = widget.querySelector('#cohesif-ai-agent-send');
 
     let chatOpen = false;
+
+    // ─── État agent en direct ─────────────────────────────────────────────────
+    var agentState = null; // null | 'await_name' | 'await_phone'
+    var agentInfo  = {};
+
+    // ── Horaires d'ouverture : agent disponible ? ──
+    function isAgentAvailable() {
+      var now = new Date();
+      var day = now.getDay(); // 0=dim … 6=sam
+      var t   = now.getHours() * 60 + now.getMinutes();
+      if (day >= 1 && day <= 5) return t >= 480 && t < 1140; // Lun–Ven 8h–19h
+      if (day === 6)             return t >= 540 && t < 1020; // Sam 9h–17h
+      return false;
+    }
+
+    // ── Mise à jour du statut header + chip LIVE ──
+    function updateAgentStatus() {
+      var avail = isAgentAvailable();
+      var dot   = document.getElementById('cohesif-ai-agent-dot');
+      var txt   = document.getElementById('cohesif-ai-status-text');
+      var chip  = document.getElementById('cohesif-ai-live-chip');
+      var btn   = document.getElementById('cohesif-ai-agent-btn');
+      if (dot)  dot.style.background = avail ? '#4ade80' : '#94a3b8';
+      if (txt)  txt.textContent = avail ? 'Agent disponible · Répond rapidement' : 'En ligne · Répond instantanément';
+      if (chip) { chip.classList.toggle('visible', avail); if (avail) chip.textContent = 'LIVE'; }
+      if (btn)  btn.textContent = avail ? '👤 Parler à un agent' : '👤 Laisser un message';
+    }
+
+    // ── Alerte Formspree ──
+    function sendAgentAlert(name, phone) {
+      var fd = new FormData();
+      fd.append('_subject', '🔴 AGENT EN DIRECT — ' + name + ' (' + phone + ')');
+      fd.append('nom', name);
+      fd.append('telephone', phone);
+      fd.append('service', 'Demande agent en direct — Cohesif Energy');
+      fd.append('message',
+        '⚡ DEMANDE DE MISE EN RELATION EN DIRECT\n\n' +
+        'Nom : '       + name  + '\n' +
+        'Téléphone : ' + phone + '\n' +
+        'Heure : '     + new Date().toLocaleString('fr-FR') + '\n' +
+        'Agent disponible : ' + (isAgentAvailable() ? 'OUI (heures ouvrables)' : 'NON — hors horaires')
+      );
+      fetch('https://formspree.io/f/mbdeypzl', {
+        method: 'POST', body: fd, headers: { 'Accept': 'application/json' }
+      });
+    }
+
+    // ── Affiche / masque la barre de saisie ──
+    function showAgentInput(placeholder) {
+      var bar = document.getElementById('cohesif-ai-agent-input-bar');
+      var inp = document.getElementById('cohesif-ai-agent-input');
+      if (bar) bar.classList.add('active');
+      if (inp) { inp.placeholder = placeholder; inp.value = ''; setTimeout(function(){ inp.focus(); }, 100); }
+    }
+
+    function hideAgentInput() {
+      var bar = document.getElementById('cohesif-ai-agent-input-bar');
+      if (bar) bar.classList.remove('active');
+    }
+
+    // ── Déclenchement du flux agent ──
+    function askAgent() {
+      var avail = isAgentAvailable();
+      agentState = 'await_name';
+      agentInfo  = {};
+      var msg = avail
+        ? '👤 <strong>Un agent est disponible !</strong><br><br>Pour vous mettre en relation, quel est votre <strong>prénom</strong> ?'
+        : '👤 <strong>Nos agents sont hors ligne</strong> pour le moment.<br><small>Horaires : Lun–Ven 8h–19h · Sam 9h–17h</small><br><br>Laissez vos coordonnées et on vous rappelle dès l\'ouverture.<br><br>Votre <strong>prénom</strong> ?';
+      showTyping();
+      setTimeout(function() {
+        hideTyping();
+        addBotMsg(msg);
+        showAgentInput('Votre prénom…');
+      }, 650);
+    }
+
+    // ── Traitement de la saisie agent ──
+    function agentSend() {
+      var inp = document.getElementById('cohesif-ai-agent-input');
+      if (!inp) return;
+      var txt = (inp.value || '').trim();
+      if (!txt) return;
+      inp.value = '';
+      addUserMsg(txt);
+
+      if (agentState === 'await_name') {
+        agentInfo.name = txt;
+        agentState = 'await_phone';
+        setTimeout(function() {
+          addBotMsg('Merci <strong>' + txt.replace(/</g, '&lt;') + '</strong> ! 📞 Votre <strong>numéro de téléphone</strong> ?');
+          showAgentInput('Votre téléphone…');
+        }, 100);
+        return;
+      }
+
+      if (agentState === 'await_phone') {
+        var name = agentInfo.name, phone = txt;
+        agentState = null;
+        hideAgentInput();
+        sendAgentAlert(name, phone);
+        var avail = isAgentAvailable();
+        var confirm = avail
+          ? '<div class="cohesif-ai-agent-confirm online">🟢 Un agent va vous appeler au <strong>' + phone.replace(/</g, '&lt;') + '</strong> dans quelques minutes.</div>'
+          : '<div class="cohesif-ai-agent-confirm offline">🕐 Nous vous rappellerons au <strong>' + phone.replace(/</g, '&lt;') + '</strong> dès l\'ouverture (Lun–Ven 8h–19h · Sam 9h–17h).</div>';
+        setTimeout(function() {
+          addBotMsg('✅ <strong>Demande enregistrée !</strong>' + confirm);
+          setTimeout(function() { showSuggestions(['📋 Devis gratuit', '☀️ Panneaux solaires', '🔌 Bornes de recharge']); }, 400);
+        }, 100);
+      }
+    }
 
     // Bulle invitation après 3s
     setTimeout(() => {
@@ -567,10 +784,29 @@
       chatWindow.classList.remove('open');
     });
 
+    // Barre de saisie agent
+    if (agentInputEl) {
+      agentInputEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); agentSend(); }
+      });
+    }
+    if (agentSendBtn) {
+      agentSendBtn.addEventListener('click', agentSend);
+    }
+
     function initChat() {
       if (chatBody.children.length === 0) {
+        updateAgentStatus();
+        var avail = isAgentAvailable();
         addBotMsg('Bonjour ! 👋 Je suis Alex, votre conseiller Cohesif Energy. Comment puis-je vous aider ?');
-        setTimeout(function () { showSuggestions(INITIAL_SUGGESTIONS); }, 400);
+        setTimeout(function () {
+          showSuggestions(INITIAL_SUGGESTIONS.concat([avail ? '👤 Parler à un agent' : '👤 Laisser un message']));
+          // Identifier le bouton agent pour mise à jour dynamique
+          var btns = chatBody.querySelectorAll('.cohesif-ai-suggestion');
+          if (btns.length) btns[btns.length - 1].id = 'cohesif-ai-agent-btn';
+        }, 400);
+      } else {
+        updateAgentStatus();
       }
     }
 
@@ -619,10 +855,22 @@
     }
 
     function handleInput(text) {
+      // Flux agent en direct : déléguer à agentSend si en attente
+      if (agentState) return;
+
+      // Détection intention agent
+      var cleanAgent = text.replace(/[\u{1F300}-\u{1FFFF}]|\p{Emoji}/gu, '').trim().toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '');
+      if (/\b(agent|humain|personne|conseiller|rappel|laisser un message|parler a un)\b/.test(cleanAgent)) {
+        addUserMsg(text);
+        askAgent();
+        return;
+      }
+
       addUserMsg(text);
       showTyping();
 
-      // Nettoyage pour la recherche
+      // Nettoyage pour la recherche FAQ
       var clean = text.replace(/[\u{1F300}-\u{1FFFF}]|\p{Emoji}/gu, '').trim().toLowerCase();
       var faq = null;
       for (var i = 0; i < faqData.length; i++) {
@@ -636,8 +884,11 @@
           addBotMsg(faq.answer);
           setTimeout(function () { showSuggestions(faq.suggestions); }, 300);
         } else {
-          addBotMsg('Je ne suis pas sûr de comprendre. Voici les sujets sur lesquels je peux vous aider :');
-          setTimeout(function () { showSuggestions(INITIAL_SUGGESTIONS); }, 300);
+          addBotMsg('Je ne suis pas sûr de comprendre. Voici les sujets sur lesquels je peux vous aider :');
+          setTimeout(function () {
+            var avail = isAgentAvailable();
+            showSuggestions(INITIAL_SUGGESTIONS.concat([avail ? '👤 Parler à un agent' : '👤 Laisser un message']));
+          }, 300);
         }
       }, 700 + Math.random() * 300);
     }
