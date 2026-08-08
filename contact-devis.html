@@ -147,7 +147,13 @@
       <p>Plus votre demande est précise, plus notre réponse sera adaptée. Un conseiller spécialisé vous recontacte sous 48h ouvrées.</p>
     </div>
 
-    <form action="mailto:cohesifenergy@gmail.com" method="post" enctype="text/plain" style="max-width:720px;margin:0 auto;background:white;padding:32px;border-radius:16px;border:1px solid var(--ink-200);">
+    <!--
+      FORMULAIRE — Configuration requise :
+      1. Créez un compte gratuit sur https://formspree.io
+      2. Créez un nouveau formulaire → copiez l'ID (ex: xrgjvdko)
+      3. Remplacez VOTRE_ID_FORMSPREE ci-dessous par votre vrai ID
+    -->
+    <form id="contact-form" style="max-width:720px;margin:0 auto;background:white;padding:32px;border-radius:16px;border:1px solid var(--ink-200);" data-formspree-id="VOTRE_ID_FORMSPREE">
       <div style="display:grid;gap:20px;">
         <div>
           <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Je suis*</label>
@@ -212,11 +218,23 @@
           <span>J'accepte d'être recontacté par Cohesif Energy concernant ma demande. Mes données sont traitées conformément à la <a href="./politique-confidentialite.html" style="color:var(--brand-700);">politique de confidentialité</a> (RGPD).</span>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg btn-block btn-arrow">Envoyer ma demande <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+        <button type="submit" id="form-submit-btn" class="btn btn-primary btn-lg btn-block btn-arrow">
+          Envoyer ma demande
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+
+        <div id="form-error-msg" class="form-error-msg">Une erreur est survenue. Veuillez réessayer ou nous écrire directement à <a href="mailto:cohesifenergy@gmail.com" style="color:#991b1b;font-weight:600;">cohesifenergy@gmail.com</a>.</div>
 
         <p style="text-align:center;font-size:13px;color:var(--ink-500);margin-top:8px;">Réponse garantie sous 48h ouvrées · Sans engagement · Données protégées</p>
       </div>
     </form>
+    <div id="form-success" class="form-success" style="max-width:720px;margin:0 auto;display:none;">
+      <div class="form-success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <h3>Demande bien reçue !</h3>
+      <p>Un conseiller Cohesif Energy vous recontacte sous <strong>48h ouvrées</strong> avec votre devis personnalisé. Surveillez votre boîte mail.</p>
+    </div>
   </div>
 </section>
 
@@ -258,8 +276,8 @@
       </div>
       <div class="feature-card">
         <h3 style="font-size:1rem;">Suivi de production</h3>
-        <p>Accès à votre espace client pour consulter vos données de production solaire et consommation.</p>
-        <p style="margin-top:16px;"><span class="btn btn-outline btn-block" style="opacity:0.55;cursor:not-allowed;pointer-events:none;">Bientôt disponible</span></p>
+        <p>Un espace client dédié pour suivre votre production solaire et vos données de consommation est en cours de développement.</p>
+        <p style="margin-top:16px;font-size:13px;color:var(--ink-500);">Disponible prochainement — vos données sont déjà enregistrées.</p>
       </div>
       <div class="feature-card">
         <h3 style="font-size:1rem;">Contrat de maintenance</h3>
