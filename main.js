@@ -80,6 +80,11 @@
       var errorMsg = document.getElementById('form-error-msg');
       var successDiv = document.getElementById('form-success');
 
+      // Copier l'email saisi dans le champ _replyto pour répondre directement au prospect
+      var emailField = contactForm.querySelector('[name="Email"]');
+      var replytoField = document.getElementById('field-replyto');
+      if (emailField && replytoField) replytoField.value = emailField.value;
+
       if (!formspreeId || formspreeId === 'VOTRE_ID_FORMSPREE') {
         errorMsg.classList.add('visible');
         errorMsg.textContent = 'Le formulaire n\'est pas encore configuré. Écrivez-nous directement à cohesifenergy@gmail.com';
