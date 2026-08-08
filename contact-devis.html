@@ -56,6 +56,10 @@
       <a href="./normes-certifications.html">Normes</a>
     </nav>
     <div class="header-cta">
+      <a href="./contact-devis.html#formulaire" style="font-size:14px;font-weight:500;color:var(--ink-700);display:inline-flex;align-items:center;gap:6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Se faire rappeler
+      </a>
       <a href="./contact-devis.html" class="btn btn-primary btn-sm btn-arrow">Devis gratuit <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
     </div>
     <button class="menu-toggle" data-menu-toggle aria-label="Ouvrir le menu">
@@ -117,7 +121,7 @@
         <div class="feature-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
         <h3>Se faire rappeler</h3>
         <p>Laissez vos coordonnées, un conseiller vous rappelle dans la journée, du lundi au vendredi 8h-19h.</p>
-        <p style="margin-top:16px;"><a href="#rappel" class="btn btn-primary btn-block">Demander un rappel</a></p>
+        <p style="margin-top:16px;"><a href="#formulaire" class="btn btn-primary btn-block">Demander un rappel</a></p>
       </div>
       <div class="feature-card">
         <div class="feature-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"></polyline></svg></div>
@@ -216,65 +220,6 @@
   </div>
 </section>
 
-<section class="section section-subtle" id="rappel">
-  <div class="container">
-    <div class="section-intro">
-      <div class="eyebrow">Demande de rappel</div>
-      <h2>Un conseiller vous rappelle <span class="gradient-text">dans la journée</span></h2>
-      <p>Renseignez vos coordonnées et le créneau qui vous convient — un expert Cohesif Energy vous contacte sous 4h ouvrées.</p>
-    </div>
-
-    <form action="https://formspree.io/f/mbdeypzl" method="POST" style="max-width:580px;margin:0 auto;background:white;padding:32px;border-radius:16px;border:1px solid var(--ink-200);">
-      <div style="display:grid;gap:20px;">
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-          <div>
-            <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Prénom*</label>
-            <input type="text" name="Prenom" required placeholder="Jean" style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;box-sizing:border-box;">
-          </div>
-          <div>
-            <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Nom*</label>
-            <input type="text" name="Nom" required placeholder="Dupont" style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;box-sizing:border-box;">
-          </div>
-        </div>
-
-        <div>
-          <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Votre numéro de téléphone*</label>
-          <input type="tel" name="Telephone" required placeholder="01 23 45 67 89" style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;box-sizing:border-box;">
-          <p style="font-size:12px;color:var(--ink-500);margin-top:6px;">Utilisé uniquement pour vous rappeler — jamais partagé.</p>
-        </div>
-
-        <div>
-          <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Créneau préféré</label>
-          <select name="Creneau" style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;background:white;box-sizing:border-box;">
-            <option value="Pas de préférence">Pas de préférence</option>
-            <option value="Matin (9h–12h)">Matin (9h–12h)</option>
-            <option value="Déjeuner (12h–14h)">Déjeuner (12h–14h)</option>
-            <option value="Après-midi (14h–18h)">Après-midi (14h–18h)</option>
-          </select>
-        </div>
-
-        <div>
-          <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Votre projet (facultatif)</label>
-          <textarea name="Projet" rows="3" placeholder="Ex : borne de recharge à domicile, panneaux solaires, pompe à chaleur…" style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
-        </div>
-
-        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--ink-600);">
-          <input type="checkbox" name="ConsentementRGPD" value="Oui" required style="margin-top:3px;flex-shrink:0;">
-          <span>J'accepte d'être recontacté par Cohesif Energy. Mes données sont traitées conformément à la <a href="./politique-confidentialite.html" style="color:var(--brand-700);">politique de confidentialité</a> (RGPD).</span>
-        </div>
-
-        <input type="hidden" name="_subject" value="Demande de rappel — Cohesif Energy">
-        <input type="hidden" name="_replyto" value="cohesifenergy@gmail.com">
-
-        <button type="submit" class="btn btn-primary btn-lg btn-block btn-arrow">Me faire rappeler <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
-
-        <p style="text-align:center;font-size:13px;color:var(--ink-500);margin-top:4px;">Rappel sous 4h ouvrées &middot; Lun–Ven 8h–19h &middot; Sam 9h–17h</p>
-      </div>
-    </form>
-  </div>
-</section>
-
 <section class="section">
   <div class="container">
     <div class="section-intro">
@@ -309,7 +254,7 @@
       <div class="feature-card">
         <h3 style="font-size:1rem;">SAV technique</h3>
         <p>Panne, problème de fonctionnement, dépannage d'urgence sur votre installation.</p>
-        <p style="margin-top:16px;"><a href="#rappel" class="btn btn-outline btn-sm">Demander un rappel</a></p>
+        <p style="margin-top:16px;"><a href="#formulaire" class="btn btn-outline btn-sm">Demander un rappel</a></p>
       </div>
       <div class="feature-card">
         <h3 style="font-size:1rem;">Suivi de production</h3>
