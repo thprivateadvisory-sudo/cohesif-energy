@@ -153,8 +153,11 @@
       2. Créez un nouveau formulaire → copiez l'ID (ex: xrgjvdko)
       3. Remplacez VOTRE_ID_FORMSPREE ci-dessous par votre vrai ID
     -->
-    <form id="contact-form" style="max-width:720px;margin:0 auto;background:white;padding:32px;border-radius:16px;border:1px solid var(--ink-200);" data-formspree-id="VOTRE_ID_FORMSPREE">
+    <form id="contact-form" style="max-width:720px;margin:0 auto;background:white;padding:32px;border-radius:16px;border:1px solid var(--ink-200);" data-formspree-id="mzdnndna">
       <div style="display:grid;gap:20px;">
+        <!-- Champs Formspree : objet de l'email reçu + adresse de réponse automatique -->
+        <input type="hidden" name="_subject" value="Nouvelle demande de devis — Cohesif Energy">
+        <input type="hidden" name="_replyto" id="field-replyto" value="">
         <div>
           <label style="display:block;font-size:14px;font-weight:500;margin-bottom:8px;color:var(--ink-800);">Je suis*</label>
           <select name="Profil" required style="width:100%;padding:12px 14px;border:1px solid var(--ink-300);border-radius:8px;font-size:15px;background:white;">
