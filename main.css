@@ -781,15 +781,19 @@ strong, b { color: var(--ink-800); font-weight: 600; }
 }
 .footer-poles-track a {
   white-space: nowrap;
-  padding: 6px 20px;
   font-size: 13px;
   color: rgba(255,255,255,0.5);
   text-decoration: none;
   transition: color 0.2s;
-  border-right: 1px solid rgba(255,255,255,0.12);
   flex-shrink: 0;
+  padding: 4px 0;
 }
-.footer-poles-track a:last-child { border-right: none; }
+.footer-poles-track a + a::before {
+  content: '·';
+  margin: 0 14px;
+  color: rgba(255,255,255,0.2);
+  font-size: 16px;
+}
 .footer-poles-track a:hover { color: white; }
 .footer-poles-track a.current { color: var(--brand-400, #34d399); }
 
