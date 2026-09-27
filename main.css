@@ -951,3 +951,21 @@ strong, b { color: var(--ink-800); font-weight: 600; }
 }
 .page-placeholder h3 { margin-bottom: 12px; }
 .page-placeholder p { max-width: 480px; margin: 0 auto; }
+
+/* === BOUTIQUE — lien de navigation === */
+.nav-desktop a.nav-shop {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--brand-700);
+  background: var(--brand-50);
+  border: 1px solid var(--brand-100);
+}
+.nav-desktop a.nav-shop:hover { background: var(--brand-100); color: var(--brand-800); }
+.mobile-menu-body a.mobile-shop { color: var(--brand-700); font-weight: 600; background: var(--brand-50); }
+.nav-desktop a { white-space: nowrap; }
+.nav-desktop a.nav-shop svg { flex-shrink: 0; }
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .nav-desktop a { padding: 8px 10px; }
+  .header-cta > a:not(.btn) { display: none; }
+}
