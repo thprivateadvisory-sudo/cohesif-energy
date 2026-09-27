@@ -31,70 +31,77 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Cohesif Energy",
-    "url": "https://cohesifenergy.fr",
-    "logo": "https://cohesifenergy.fr/logo.png",
-    "image": "https://cohesifenergy.fr/logo.png",
-    "description": "Cohesif Energy installe des bornes de recharge électrique, panneaux solaires, pompes à chaleur et réalise des audits énergétiques partout en France.",
-    "email": "cohesifenergy@gmail.com",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "200 rue de la Croix Nivert",
-      "addressLocality": "Paris",
-      "postalCode": "75015",
-      "addressCountry": "FR"
-    },
-    "areaServed": "FR",
-    "priceRange": "€€",
-    "sameAs": [
-      "https://cohesifauto.fr",
-      "https://cohesifbtp.fr",
-      "https://cohesifaccess.fr"
-    ],
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Solutions énergétiques",
-      "itemListElement": [
-        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Bornes de recharge électrique IRVE"}},
-        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Panneaux solaires photovoltaïques"}},
-        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pompes à chaleur"}},
-        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Audit énergétique"}}
-      ]
-    }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Cohesif Energy",
-    "url": "https://cohesifenergy.fr",
-    "logo": "https://cohesifenergy.fr/logo.png",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "email": "cohesifenergy@gmail.com",
-      "contactType": "customer service",
-      "availableLanguage": "French"
-    },
-    "sameAs": [
-      "https://cohesifauto.fr",
-      "https://cohesifbtp.fr",
-      "https://cohesifaccess.fr"
+    "@graph": [
+      {
+        "@type": ["Organization", "LocalBusiness"],
+        "@id": "https://cohesifenergy.fr/#organization",
+        "name": "Cohesif Energy",
+        "alternateName": [
+          "Cohesif",
+          "Cohesif Énergie",
+          "Cohesif Energie",
+          "CohesifEnergy",
+          "cohesifenergy.fr",
+          "Groupe Cohesif Energy"
+        ],
+        "url": "https://cohesifenergy.fr/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://cohesifenergy.fr/logo.png"
+        },
+        "image": "https://cohesifenergy.fr/logo.png",
+        "description": "Cohesif Energy (cohesifenergy.fr) est un installateur certifié RGE et IRVE : bornes de recharge électrique, panneaux solaires, pompes à chaleur et audits énergétiques partout en France.",
+        "slogan": "Accélérez votre transition énergétique",
+        "email": "cohesifenergy@gmail.com",
+        "telephone": "+33756855727",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "200 rue de la Croix Nivert",
+          "addressLocality": "Paris",
+          "postalCode": "75015",
+          "addressCountry": "FR"
+        },
+        "areaServed": { "@type": "Country", "name": "France" },
+        "priceRange": "€€",
+        "knowsAbout": ["Bornes de recharge IRVE", "Panneaux solaires photovoltaïques", "Pompes à chaleur", "Audit énergétique", "Transition énergétique"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "cohesifenergy@gmail.com",
+          "telephone": "+33756855727",
+          "contactType": "customer service",
+          "areaServed": "FR",
+          "availableLanguage": "French"
+        },
+        "parentOrganization": {
+          "@type": "Organization",
+          "name": "Groupe Cohesif"
+        },
+        "sameAs": [
+          "https://cohesifauto.fr",
+          "https://cohesifbtp.fr",
+          "https://cohesifaccess.fr"
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Solutions énergétiques Cohesif Energy",
+          "itemListElement": [
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Bornes de recharge électrique IRVE"}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Panneaux solaires photovoltaïques"}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pompes à chaleur"}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Audit énergétique"}}
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://cohesifenergy.fr/#website",
+        "name": "Cohesif Energy",
+        "alternateName": ["Cohesif", "cohesifenergy.fr"],
+        "url": "https://cohesifenergy.fr/",
+        "inLanguage": "fr-FR",
+        "publisher": { "@id": "https://cohesifenergy.fr/#organization" }
+      }
     ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Cohesif Energy",
-    "url": "https://cohesifenergy.fr",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://cohesifenergy.fr/?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
   }
   </script>
   <script type="application/ld+json">
@@ -434,8 +441,7 @@
 <section class="hero">
   <div class="container">
     <div class="hero-content">
-      <div class="eyebrow">Cohesif Energy</div>
-      <h1 class="hero-title">Accélérez votre <span class="gradient-text">transition énergétique</span></h1>
+      <h1 class="hero-title"><span class="eyebrow">Cohesif Energy</span> Accélérez votre <span class="gradient-text">transition énergétique</span></h1>
       <p class="hero-desc">Bornes de recharge, panneaux solaires, pompes à chaleur, audit énergétique : <strong>un partenaire unique</strong> pour produire, stocker et consommer une énergie propre — chez vous comme dans votre entreprise.</p>
       <div class="hero-ctas">
         <a href="./contact-devis.html" class="btn btn-primary btn-lg btn-arrow">Demander un devis gratuit <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>

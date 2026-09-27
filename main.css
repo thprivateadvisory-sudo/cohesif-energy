@@ -318,6 +318,12 @@ strong, b { color: var(--ink-800); font-weight: 600; }
   letter-spacing: -0.025em;
   margin-bottom: 24px;
 }
+.hero-title .eyebrow {
+  display: flex;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.4;
+}
 .hero-desc {
   font-size: clamp(1.0625rem, 2.5vw, 1.25rem);
   color: var(--ink-600);
