@@ -25,6 +25,17 @@ COMMANDE = DATA["commandeUrl"]
 PRODUITS = DATA["produits"]
 TVA = 0.20
 
+HYPERWATT = "Hyperwatt (Jsowell New Energy), présent dans plus de 60 pays"
+# Libellés propres à chaque gamme (données structurées, fiche produit)
+GAMMES = {
+    "ac": {"categorie": "Borne de recharge pour véhicule électrique", "marque": "Hyperwatt", "fabricant": HYPERWATT,
+           "legende": "Choisissez votre formule", "pourquoi": "Pourquoi cette borne", "dispo": "MadeToOrder"},
+    "dc": {"categorie": "Borne de recharge pour véhicule électrique", "marque": "Hyperwatt", "fabricant": HYPERWATT,
+           "legende": "Choisissez la puissance", "pourquoi": "Pourquoi cette borne", "dispo": "MadeToOrder"},
+    "batterie": {"categorie": "Batterie lithium LiFePO4", "marque": None, "fabricant": None,
+                 "legende": "Votre batterie", "pourquoi": "Pourquoi cette batterie", "dispo": "InStock"},
+}
+
 ref = (ROOT / "bornes-recharge.html").read_text(encoding="utf-8")
 HEADER = ref[ref.index('<header class="header">'):ref.index("<main>")]
 FOOTER = ref[ref.index('<footer class="footer">'):ref.index("</footer>") + len("</footer>")]
@@ -64,7 +75,11 @@ ICON = {
     "clock": '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
     "arrow": '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
     "cart": '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>',
-    "euro": '<path d="M4 10h12"/><path d="M4 14h9"/><path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2"/>',
+    "sun": '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
+    "van": '<path d="M2 17V7a2 2 0 0 1 2-2h11l5 5v7h-2"/><path d="M15 5v5h5"/><line x1="9" y1="17" x2="14" y2="17"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/>',
+    "anchor": '<circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/>',
+    "home": '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+    "euro":'<path d="M4 10h12"/><path d="M4 14h9"/><path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2"/>',
 }
 
 
@@ -194,8 +209,8 @@ def faq_ld(items):
 
 
 FAQ_BOUTIQUE = [
-    ("Qui vend et expédie les bornes ?",
-     "Les bornes sont sélectionnées par Cohesif Energy et vendues par <strong>Cohesif Commerce</strong>, la société de commerce du Groupe Cohesif. "
+    ("Qui vend et expédie les produits ?",
+     "Les bornes et batteries sont sélectionnées par Cohesif Energy et vendues par <strong>Cohesif Commerce</strong>, la société de commerce du Groupe Cohesif. "
      "Lorsque vous cliquez sur « Acheter », vous êtes dirigé vers la page de commande sécurisée de Cohesif Commerce, puis vers le paiement Stripe."),
     ("Le paiement est-il sécurisé ?",
      "Oui. Le paiement est traité par <strong>Stripe</strong>, qui gère aussi les paiements d'Amazon, Uber ou Decathlon. "
@@ -208,7 +223,8 @@ FAQ_BOUTIQUE = [
      "La 22 kW demande une alimentation <strong>triphasée</strong> et un véhicule capable de charger à 22 kW en AC. En cas de doute, notre équipe vous conseille gratuitement."),
     ("Quels sont les délais de livraison ?",
      "Bornes maison : expédition sous 7 à 12 jours ouvrés, livraison offerte en France métropolitaine. "
-     "Bornes rapides DC : livraison sur palette sous 6 à 8 semaines, incluse en France métropolitaine."),
+     "Bornes rapides DC : livraison sur palette sous 6 à 8 semaines, incluse en France métropolitaine. "
+     "Batteries lithium : livraison offerte sous 7 à 10 jours ouvrés."),
     ("Comment fonctionne l'acompte sur les bornes rapides ?",
      "Pour les bornes DC, vous réglez un <strong>acompte de 30 %</strong> en ligne pour réserver votre borne. "
      "Le solde est payable avant expédition, par virement. La facture avec TVA est émise au nom de votre entreprise."),
@@ -228,14 +244,16 @@ FAQ_BOUTIQUE = [
 def build_boutique():
     ac = [p for p in PRODUITS if p["gamme"] == "ac"]
     dc = [p for p in PRODUITS if p["gamme"] == "dc"]
+    bat = [p for p in PRODUITS if p["gamme"] == "batterie"]
     min_ac = min(prix_min(p) for p in ac)
+    min_bat = min(prix_min(p) for p in bat)
     itemlist = {
-        "@context": "https://schema.org", "@type": "ItemList", "name": "Boutique Cohesif Energy — bornes de recharge",
+        "@context": "https://schema.org", "@type": "ItemList", "name": "Boutique Cohesif Energy — bornes de recharge et batteries",
         "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/{p['slug']}.html", "name": p["nom"]}
                             for i, p in enumerate(PRODUITS)]}
-    title = "Boutique bornes de recharge — achat en ligne, pose IRVE en option | Cohesif Energy"
+    title = "Boutique bornes de recharge et batteries lithium — achat en ligne | Cohesif Energy"
     desc = (f"Achetez votre borne de recharge en ligne dès {round(min_ac)} € TTC : 7 kW, 22 kW, bornes rapides DC jusqu'à 240 kW. "
-            "Livraison offerte, paiement sécurisé, garantie 2 ans, pose par électricien IRVE en option.")
+            f"Batteries lithium LiFePO4 dès {round(min_bat)} € TTC. Livraison offerte, paiement sécurisé, garantie 2 ans.")
     out = head(title, desc, "boutique.html", "img/boutique/gamme.webp", [itemlist, faq_ld(FAQ_BOUTIQUE)])
     out += f"""
 <section class="shop-hero">
@@ -243,8 +261,8 @@ def build_boutique():
     <div class="shop-hero-text">
       <div class="eyebrow">Boutique en ligne</div>
       <h1>Votre borne de recharge, <span class="gradient-text">livrée chez vous</span>, posée si vous le souhaitez.</h1>
-      <p class="shop-hero-desc">Bornes maison 7 et 22 kW, bornes rapides DC jusqu'à 240 kW pour les professionnels. Prix affichés, paiement sécurisé en quelques clics, sans attendre de devis.</p>
-      <div class="shop-hero-price">{icon('bolt', 18)}<span>Borne maison dès <strong>{eur(min_ac)} TTC</strong>, livraison offerte</span></div>
+      <p class="shop-hero-desc">Bornes maison 7 et 22 kW, bornes rapides DC jusqu'à 240 kW pour les professionnels, batteries lithium pour le solaire et les loisirs. Prix affichés, paiement sécurisé en quelques clics, sans attendre de devis.</p>
+      <div class="shop-hero-price">{icon('bolt', 18)}<span>Borne maison dès <strong>{eur(min_ac)} TTC</strong> · <a href="#batteries">batterie lithium</a> dès <strong>{eur(min_bat)} TTC</strong></span></div>
       <div class="hero-ctas shop-hero-ctas">
         <a href="#maison" class="btn btn-primary btn-lg btn-arrow">Bornes pour la maison {icon('arrow', 14, 2.5)}</a>
         <a href="#pro" class="btn btn-outline btn-lg">Bornes rapides pro</a>
@@ -301,6 +319,30 @@ def build_boutique():
       <div class="pro-band-ctas">
         <a href="./contact-devis.html" class="btn btn-primary btn-arrow">Devis projet sous 48 h {icon('arrow', 14, 2.5)}</a>
         <a href="https://cohesifleasing.fr" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Financer avec Cohesif Leasing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section shop-section" id="batteries">
+  <div class="container">
+    <div class="shop-section-head">
+      <div>
+        <div class="eyebrow">Stockage d'énergie</div>
+        <h2>Batteries lithium LiFePO4</h2>
+        <p>Stockez l'énergie de vos panneaux solaires, partez en camping-car ou en bateau en toute autonomie. Une batterie qui dure plus de 10 ans, deux fois plus légère qu'une batterie plomb.</p>
+      </div>
+    </div>
+    <div class="product-grid product-grid-2">{''.join(card(p) for p in bat)}
+      <div class="battery-uses">
+        <h3>Pour quels usages ?</h3>
+        <ul>
+          <li>{icon('sun', 20)}<span><strong>Installation solaire</strong><small>Stockez votre production pour la consommer le soir</small></span></li>
+          <li>{icon('van', 20)}<span><strong>Camping-car, van, fourgon</strong><small>Frigo, éclairage, écrans : l'autonomie sans groupe électrogène</small></span></li>
+          <li>{icon('anchor', 20)}<span><strong>Bateau</strong><small>Batterie de service légère, sans entretien</small></span></li>
+          <li>{icon('home', 20)}<span><strong>Cabanon, site isolé, secours</strong><small>Une réserve d'énergie en cas de coupure</small></span></li>
+        </ul>
+        <p class="battery-uses-note">Vous remplacez une batterie plomb ou AGM ? Vérifiez que votre chargeur ou régulateur dispose d'un profil lithium. <a href="./contact-devis.html">Un conseiller vérifie gratuitement.</a></p>
       </div>
     </div>
   </div>
@@ -379,6 +421,21 @@ POSE_INCLUS = [
 
 
 def product_faq(p):
+    if p["gamme"] == "batterie":
+        return [
+            ("Puis-je remplacer ma batterie plomb ou AGM par celle-ci ?",
+             "Oui dans la plupart des cas : même tension 12 V et un format proche d'une batterie plomb 100 Ah. "
+             "Vérifiez simplement que votre chargeur, votre régulateur solaire ou votre convertisseur dispose d'un <strong>profil lithium / LiFePO4</strong> "
+             "(tension de charge de 14,2 à 14,6 V). En cas de doute, envoyez-nous la référence de votre matériel : nous vérifions gratuitement."),
+            ("Combien de temps tient une charge ?",
+             "La batterie stocke <strong>1 280 Wh</strong>. Par exemple : environ 24 h pour un réfrigérateur de camping-car (≈ 50 W), "
+             "une centaine d'heures pour un éclairage LED de 10 W. Elle se recharge en ≈ 5 h avec un chargeur LiFePO4 de 20 A, ou avec vos panneaux solaires."),
+            ("Peut-on l'utiliser en hiver ?",
+             "Elle fonctionne de -10 °C à +60 °C. Comme toutes les batteries LiFePO4, elle ne doit pas être rechargée en dessous de 0 °C : "
+             "en hiver, installez-la dans un endroit abrité, à l'intérieur du véhicule ou du local technique."),
+            ("Puis-je me rétracter ?",
+             "Oui, les particuliers disposent de 14 jours après réception pour se rétracter. La batterie doit être retournée non utilisée, dans son emballage d'origine."),
+        ]
     if p["gamme"] == "ac":
         return [
             ("La borne est-elle compatible avec ma voiture ?",
@@ -407,20 +464,22 @@ def build_product(p):
     rec = min(p["variantes"], key=lambda v: v["prix"])
     tax = p["affichage"]
     url = f"{SITE}/{p['slug']}.html"
+    g = GAMMES[p["gamme"]]
     offers = []
     for v in p["variantes"]:
         offers.append({
             "@type": "Offer", "sku": v["id"], "name": f"{p['nom']} — {v['label']}",
             "price": f"{ttc(p, v['prix']):.2f}", "priceCurrency": "EUR",
-            "availability": "https://schema.org/MadeToOrder", "url": url,
+            "availability": f"https://schema.org/{g['dispo']}", "url": url,
             "seller": {"@type": "Organization", "name": DATA["vendeur"]},
         })
     product_ld = {
         "@context": "https://schema.org", "@type": "Product", "name": p["nom"], "description": p["accroche"],
-        "image": [f"{SITE}/{g}" for g in p["galerie"]], "sku": rec["id"],
-        "brand": {"@type": "Brand", "name": "Hyperwatt"}, "category": "Borne de recharge pour véhicule électrique",
-        "offers": offers,
+        "image": [f"{SITE}/{img}" for img in p["galerie"]], "sku": rec["id"],
     }
+    if g["marque"]:
+        product_ld["brand"] = {"@type": "Brand", "name": g["marque"]}
+    product_ld.update({"category": g["categorie"], "offers": offers})
     crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Accueil", "item": f"{SITE}/"},
         {"@type": "ListItem", "position": 2, "name": "Boutique", "item": f"{SITE}/boutique.html"},
@@ -473,6 +532,9 @@ def build_product(p):
     specs = "".join(f"<tr><th>{e(k)}</th><td>{e(v)}</td></tr>" for k, v in p["specs"].items())
     others = [o for o in PRODUITS if o is not p]
     others = sorted(others, key=lambda o: (o["gamme"] != p["gamme"]))[:3]
+    bornes = [o for o in others + [p] if o["gamme"] != "batterie"]
+    autres = "Les autres bornes" if len(bornes) == len(others) + 1 else "Nos autres produits"
+    fabricant = f"\n        <tr><th>Fabricant</th><td>{e(g['fabricant'])}</td></tr>" if g["fabricant"] else ""
 
     reassurance = [
         ("truck", p["livraison"]),
@@ -507,7 +569,7 @@ def build_product(p):
       {pay_note}
 
       <fieldset class="variants">
-        <legend>{'Choisissez votre formule' if p['gamme'] == 'ac' else 'Choisissez la puissance'}</legend>
+        <legend>{g['legende']}</legend>
         {''.join(vopts)}
       </fieldset>
       {pose_block}
@@ -524,15 +586,14 @@ def build_product(p):
 <section class="section section-subtle">
   <div class="container pdp-details">
     <div>
-      <div class="eyebrow">Pourquoi cette borne</div>
+      <div class="eyebrow">{g['pourquoi']}</div>
       <h2>Les points forts</h2>
       <ul class="pdp-points">{points}</ul>
     </div>
     <div>
       <div class="eyebrow">Fiche technique</div>
       <h2>Caractéristiques</h2>
-      <table class="spec-table"><tbody>{specs}
-        <tr><th>Fabricant</th><td>Hyperwatt (Jsowell New Energy), présent dans plus de 60 pays</td></tr>
+      <table class="spec-table"><tbody>{specs}{fabricant}
       </tbody></table>
     </div>
   </div>
@@ -550,7 +611,7 @@ def build_product(p):
 
 <section class="section section-subtle">
   <div class="container">
-    <div class="shop-section-head"><div><div class="eyebrow">Vous aimerez aussi</div><h2>Les autres bornes</h2></div>
+    <div class="shop-section-head"><div><div class="eyebrow">Vous aimerez aussi</div><h2>{autres}</h2></div>
     <a href="./boutique.html" class="btn btn-outline">Toute la boutique</a></div>
     <div class="product-grid">{''.join(card(o) for o in others)}
     </div>

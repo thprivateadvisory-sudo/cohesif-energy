@@ -37,6 +37,7 @@
 }
 .shop-hero-price svg { color: var(--brand-600); }
 .shop-hero-price strong { color: var(--brand-700); }
+.shop-hero-price a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .shop-hero-ctas { justify-content: flex-start; margin-top: 24px; }
 .shop-hero-visual img {
   width: 100%;
@@ -218,6 +219,32 @@
 .pro-band-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 .pro-band .btn-outline { background: transparent; color: white; border-color: var(--ink-700); }
 .pro-band .btn-outline:hover { background: var(--ink-800); }
+
+/* === BATTERIES : USAGES === */
+.battery-uses {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--brand-200);
+  background: var(--brand-50);
+}
+.battery-uses h3 { font-size: 1.3rem; margin-bottom: 18px; }
+.battery-uses ul { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 16px; }
+.battery-uses li { display: flex; gap: 14px; align-items: flex-start; }
+.battery-uses li svg {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: var(--radius-full);
+  background: white;
+  color: var(--brand-600);
+}
+.battery-uses li strong { display: block; color: var(--ink-900); }
+.battery-uses li small { display: block; font-size: 14px; color: var(--ink-600); }
+.battery-uses-note { margin-top: auto; font-size: 14px; color: var(--ink-600); }
+.battery-uses-note a { color: var(--brand-700); font-weight: 600; }
 
 /* === ÉTAPES === */
 .shop-steps {
