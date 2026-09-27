@@ -163,6 +163,23 @@ def main():
                 route.fulfill(status=404, body=b'')
         for host in roots:
             ctx.route(f'**://{host}/**', serve)
+        # polices Google du site : téléchargées une fois via curl (le navigateur n'a pas
+        # d'accès direct), mises en cache dans .cache/ puis servies localement
+        cache = HERE / '.cache'
+        cache.mkdir(exist_ok=True)
+
+        def fonts(route):
+            url = route.request.url
+            f = cache / __import__('hashlib').sha1(url.encode()).hexdigest()
+            if not f.exists():
+                subprocess.run(['curl', '-sSfL', '-o', str(f), '-A',
+                                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                                '(KHTML, like Gecko) Chrome/120 Safari/537.36', url], check=True)
+            ctype = 'text/css' if 'googleapis' in url else 'font/woff2'
+            route.fulfill(status=200, body=f.read_bytes(), content_type=ctype,
+                          headers={'Access-Control-Allow-Origin': '*'})
+        ctx.route('https://fonts.googleapis.com/**', fonts)
+        ctx.route('https://fonts.gstatic.com/**', fonts)
         # pas d'analytics ni de scripts tiers pendant le tournage
         ctx.route('**/*googletagmanager*/**', lambda r: r.abort())
 
