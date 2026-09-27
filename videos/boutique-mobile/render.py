@@ -143,7 +143,9 @@ def cam_transform(s, fx, fy):
 
 def main():
     with sync_playwright() as pw:
-        b = pw.chromium.launch(executable_path=CHROME)
+        # iframe dans le même processus : sinon Chrome le rend en basse résolution puis l'agrandit (flou)
+        b = pw.chromium.launch(executable_path=CHROME, args=[
+            '--disable-site-isolation-trials', '--disable-features=IsolateOrigins,site-per-process'])
         ctx = b.new_context(viewport={'width': W, 'height': H}, device_scale_factor=3,
                             is_mobile=True, has_touch=True, locale='fr-FR')
         ctx.add_init_script(INIT)
@@ -232,7 +234,7 @@ def main():
         n = int(END * FPS)
         ff = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error',
             '-f', 'image2pipe', '-framerate', str(FPS), '-i', '-',
-            '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p',
+            '-c:v', 'libx264', '-preset', 'slow', '-crf', '14', '-tune', 'animation', '-pix_fmt', 'yuv420p',
             '-movflags', '+faststart', OUT], stdin=subprocess.PIPE)
         for i in range(n):
             frame(i / FPS)
