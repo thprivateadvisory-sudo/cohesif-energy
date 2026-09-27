@@ -1058,8 +1058,11 @@
       transform: scale(1.12);
       box-shadow: 0 6px 24px rgba(37,211,102,0.55);
     }
-    @media (max-width: 600px) {
-      .whatsapp-float { bottom: 18px; right: 18px; width: 52px; height: 52px; }
+    @media (max-width: 768px) {
+      /* Aligné à côté de la barre "Devis gratuit" pour ne pas la masquer */
+      .whatsapp-float { bottom: 16px; right: 16px; width: 52px; height: 52px; }
+      .whatsapp-float svg { width: 26px; height: 26px; }
+      #cohesif-ai-widget .cohesif-mobile-sticky-cta { right: 78px; }
     }
   </style>
 </body>
