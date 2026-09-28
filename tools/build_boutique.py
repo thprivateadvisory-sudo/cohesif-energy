@@ -304,8 +304,8 @@ def build_boutique():
       <div class="hero-ctas shop-hero-ctas">
         <a href="#maison" class="btn btn-primary btn-lg btn-arrow">Bornes pour la maison {icon('arrow', 14, 2.5)}</a>
         <a href="#pro" class="btn btn-outline btn-lg">Bornes rapides pro</a>
-        <a href="#solaire" class="btn btn-outline btn-lg">Solaire et stockage</a>
       </div>
+      <a href="#solaire" class="shop-hero-new"><span>Nouveau</span>Panneaux solaires, onduleurs hybrides et batteries de stockage {icon('arrow', 14, 2.5)}</a>
     </div>
     <div class="shop-hero-visual">
       <img src="./img/boutique/gamme.webp" alt="Gamme de bornes de recharge AC et DC" width="1400" height="1187" />
@@ -423,10 +423,10 @@ def build_boutique():
       <h2>Commander en 4 étapes</h2>
     </div>
     <ol class="shop-steps">
-      <li><span>1</span><h3>Choisissez votre borne</h3><p>Borne seule ou avec pose, en fonction de votre installation.</p></li>
+      <li><span>1</span><h3>Choisissez votre équipement</h3><p>Borne, batterie ou matériel solaire, seul ou avec pose selon votre installation.</p></li>
       <li><span>2</span><h3>Payez en ligne</h3><p>Paiement sécurisé Stripe : CB, Apple Pay, Google Pay. Facture envoyée par e-mail.</p></li>
-      <li><span>3</span><h3>Livraison ou pose</h3><p>Livraison offerte, ou visite de nos électriciens IRVE pour l'installation.</p></li>
-      <li><span>4</span><h3>Rechargez</h3><p>Branchez votre véhicule. Notre SAV reste joignable pendant toute la garantie.</p></li>
+      <li><span>3</span><h3>Livraison ou pose</h3><p>Livraison chez vous, ou installation par nos électriciens IRVE et installateurs RGE.</p></li>
+      <li><span>4</span><h3>Profitez-en</h3><p>Rechargez, produisez, stockez. Notre SAV reste joignable pendant toute la garantie.</p></li>
     </ol>
   </div>
 </section>

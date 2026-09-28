@@ -424,63 +424,57 @@
       ]
     },
     {
-      "slug": "boutique-batterie-stockage-solaire-murale",
-      "gamme": "stockage",
-      "cible": "Maison · Autoconsommation · Secours",
-      "nom": "Batterie de stockage solaire LiFePO4 · 5 à 16 kWh",
-      "accroche": "Stockez l'électricité de vos panneaux le jour et consommez-la le soir : de 5 à 16 kWh, plus de 6 000 cycles de charge.",
-      "badge": "Nouveau",
-      "image": "img/boutique/batterie-murale-51v.webp",
+      "slug": "boutique-panneau-solaire-640w-biface",
+      "gamme": "solaire",
+      "cible": "Grande toiture · Ombrière · Bâtiment agricole · Au sol",
+      "nom": "Panneau solaire 640 W biface",
+      "accroche": "640 W par panneau, jusqu'à 24,8 % de rendement et une face arrière qui produit aussi grâce à la lumière réfléchie.",
+      "badge": "Haut rendement",
+      "image": "img/boutique/panneau-solaire-640w.webp",
       "galerie": [
-        "img/boutique/batterie-murale-51v.webp",
-        "img/boutique/batterie-murale-51v-gamme.webp",
-        "img/boutique/batterie-murale-51v-sol.webp",
-        "img/boutique/kit-onduleur-batterie.webp"
+        "img/boutique/panneau-solaire-640w.webp",
+        "img/boutique/panneau-solaire-640w-atouts.webp",
+        "img/boutique/panneau-solaire-640w-dimensions.webp",
+        "img/boutique/panneau-solaire-640w-face.webp"
       ],
-      "affichage": "TTC",
+      "affichage": "HT",
       "paiement": "total",
       "delai": "Délai de livraison confirmé avec votre prix",
       "livraison": "Livraison sur palette en France métropolitaine",
       "garantie": "Garantie 2 ans minimum, SAV en France",
-      "autonomie": "10 kWh stockés : de quoi alimenter une maison du coucher du soleil au lendemain matin",
+      "autonomie": "≈ 700 à 900 kWh produits par panneau et par an en France, selon la région",
       "points": [
-        "Plus de 6 000 cycles : plus de 15 ans d'usage à raison d'une charge par jour",
-        "Chimie LiFePO4, la plus sûre des technologies lithium : stable, sans risque d'emballement thermique",
-        "Évolutive : jusqu'à 15 batteries en parallèle, commencez petit et ajoutez de la capacité plus tard",
-        "Écran intégré pour suivre la charge d'un coup d'œil",
-        "Compatible avec les onduleurs hybrides 48 V, dont les onduleurs de notre boutique",
-        "Version IP65 disponible pour un garage ou un emplacement exposé"
+        "640 W et 24,8 % de rendement : moins de panneaux pour la même puissance",
+        "Biface : la face arrière capte la lumière réfléchie par le sol ou la toiture, idéal en ombrière et au sol",
+        "Cellules N-type 182 mm à 16 busbars, performantes par forte chaleur et faible luminosité",
+        "Double verre trempé 2 mm : robuste face à la grêle, à l'humidité et au vieillissement",
+        "Boîte de jonction IP68 à 3 diodes et connecteurs compatibles MC4 : pose rapide et fiable",
+        "Parfait pour les ombrières de parking, en complément de nos bornes de recharge"
       ],
       "specs": {
-        "Tension nominale": "51,2 V",
-        "Plage de tension": "43,2 à 57,6 V DC",
-        "Capacité": "100 Ah · 200 Ah · 314 Ah",
-        "Énergie": "5,12 kWh · 10,24 kWh · 16,07 kWh",
-        "Technologie": "Lithium fer phosphate (LiFePO4)",
-        "Durée de vie": "Plus de 6 000 cycles",
-        "Mise en parallèle": "Jusqu'à 15 batteries",
-        "Dimensions": "5 kWh : 540 × 460 × 200 mm · 10 kWh : 790 × 530 × 200 mm · 16 kWh : 850 × 550 × 250 mm",
-        "Poids": "44 kg · 87 kg · 130 kg",
-        "Indice de protection": "IP20, IP65 en option",
-        "Pose": "Murale ou au sol",
-        "Références": "WY-100512 · WY-200512 · WY-314512"
+        "Puissance": "640 W (gamme 605 à 640 W)",
+        "Rendement": "Jusqu'à 24,8 %",
+        "Cellules": "N-type 182 mm, 144 demi-cellules (72 × 2), 16 busbars",
+        "Technologie": "Biface double verre",
+        "Verre": "2 × 2 mm trempé, face avant antireflet",
+        "Dimensions": "2278 × 1134 × 35 mm (ou 30 mm)",
+        "Poids": "31,8 kg",
+        "Boîte de jonction": "IP68, 3 diodes bypass",
+        "Câbles et connecteurs": "4 mm², EVO2 compatibles MC4",
+        "Conditionnement": "31 ou 36 panneaux par palette",
+        "Référence": "JAM144D 605-640N"
       },
       "variantes": [
         {
-          "id": "CE-WY-100512",
-          "label": "5 kWh",
-          "detail": "5,12 kWh · 100 Ah · 44 kg"
+          "id": "CE-PV640-U",
+          "label": "À l'unité",
+          "detail": "Pour compléter ou agrandir une installation"
         },
         {
-          "id": "CE-WY-200512",
-          "label": "10 kWh",
-          "detail": "10,24 kWh · 200 Ah · 87 kg",
+          "id": "CE-PV640-PAL",
+          "label": "Palette complète",
+          "detail": "31 panneaux · ≈ 19,8 kWc · le meilleur prix au watt",
           "recommande": true
-        },
-        {
-          "id": "CE-WY-314512",
-          "label": "16 kWh",
-          "detail": "16,07 kWh · 314 Ah · 130 kg"
         }
       ]
     },
@@ -488,12 +482,13 @@
       "slug": "boutique-onduleur-hybride-triphase",
       "gamme": "onduleur",
       "cible": "Maison triphasée · Atelier · Commerce · Site isolé",
-      "nom": "Onduleur solaire hybride triphasé · 8 à 12 kW",
+      "nom": "Onduleur hybride triphasé · 8 à 12 kW",
       "accroche": "Le cœur de votre installation : il pilote panneaux, batterie et réseau, et bascule en 10 ms en cas de coupure.",
       "badge": "Nouveau",
       "image": "img/boutique/onduleur-hybride-spi.webp",
       "galerie": [
         "img/boutique/onduleur-hybride-spi.webp",
+        "img/boutique/onduleur-hybride-spi-atouts.webp",
         "img/boutique/kit-onduleur-batterie.webp"
       ],
       "affichage": "HT",
@@ -545,55 +540,64 @@
       ]
     },
     {
-      "slug": "boutique-panneau-solaire-640w-biface",
-      "gamme": "solaire",
-      "cible": "Grande toiture · Ombrière · Bâtiment agricole · Au sol",
-      "nom": "Panneau solaire 640 W biface N-type",
-      "accroche": "640 W par panneau, jusqu'à 24,8 % de rendement et une face arrière qui produit aussi grâce à la lumière réfléchie.",
-      "badge": "Haut rendement",
-      "image": "img/boutique/panneau-solaire-640w.webp",
+      "slug": "boutique-batterie-stockage-solaire-murale",
+      "gamme": "stockage",
+      "cible": "Maison · Autoconsommation · Secours",
+      "nom": "Batterie solaire murale LiFePO4 · 5 à 16 kWh",
+      "accroche": "Stockez l'électricité de vos panneaux le jour et consommez-la le soir : de 5 à 16 kWh, plus de 6 000 cycles de charge.",
+      "badge": "Nouveau",
+      "image": "img/boutique/batterie-murale-51v.webp",
       "galerie": [
-        "img/boutique/panneau-solaire-640w.webp",
-        "img/boutique/panneau-solaire-640w-face.webp"
+        "img/boutique/batterie-murale-51v.webp",
+        "img/boutique/batterie-murale-51v-atouts.webp",
+        "img/boutique/batterie-murale-51v-capacites.webp",
+        "img/boutique/batterie-murale-51v-sol.webp",
+        "img/boutique/kit-onduleur-batterie.webp"
       ],
-      "affichage": "HT",
+      "affichage": "TTC",
       "paiement": "total",
       "delai": "Délai de livraison confirmé avec votre prix",
       "livraison": "Livraison sur palette en France métropolitaine",
       "garantie": "Garantie 2 ans minimum, SAV en France",
-      "autonomie": "≈ 700 à 900 kWh produits par panneau et par an en France, selon la région",
+      "autonomie": "10 kWh stockés : de quoi alimenter une maison du coucher du soleil au lendemain matin",
       "points": [
-        "640 W et 24,8 % de rendement : moins de panneaux pour la même puissance",
-        "Biface : la face arrière capte la lumière réfléchie par le sol ou la toiture, idéal en ombrière et au sol",
-        "Cellules N-type 182 mm à 16 busbars, performantes par forte chaleur et faible luminosité",
-        "Double verre trempé 2 mm : robuste face à la grêle, à l'humidité et au vieillissement",
-        "Boîte de jonction IP68 à 3 diodes et connecteurs compatibles MC4 : pose rapide et fiable",
-        "Parfait pour les ombrières de parking, en complément de nos bornes de recharge"
+        "Plus de 6 000 cycles : plus de 15 ans d'usage à raison d'une charge par jour",
+        "Chimie LiFePO4, la plus sûre des technologies lithium : stable, sans risque d'emballement thermique",
+        "Évolutive : jusqu'à 15 batteries en parallèle, commencez petit et ajoutez de la capacité plus tard",
+        "Écran intégré pour suivre la charge d'un coup d'œil",
+        "Compatible avec les onduleurs hybrides 48 V, dont les onduleurs de notre boutique",
+        "Version IP65 disponible pour un garage ou un emplacement exposé"
       ],
       "specs": {
-        "Puissance": "640 W (gamme 605 à 640 W)",
-        "Rendement": "Jusqu'à 24,8 %",
-        "Cellules": "N-type 182 mm, 144 demi-cellules (72 × 2), 16 busbars",
-        "Technologie": "Biface double verre",
-        "Verre": "2 × 2 mm trempé, face avant antireflet",
-        "Dimensions": "2278 × 1134 × 35 mm (ou 30 mm)",
-        "Poids": "31,8 kg",
-        "Boîte de jonction": "IP68, 3 diodes bypass",
-        "Câbles et connecteurs": "4 mm², EVO2 compatibles MC4",
-        "Conditionnement": "31 ou 36 panneaux par palette",
-        "Référence": "JAM144D 605-640N"
+        "Tension nominale": "51,2 V",
+        "Plage de tension": "43,2 à 57,6 V DC",
+        "Capacité": "100 Ah · 200 Ah · 314 Ah",
+        "Énergie": "5,12 kWh · 10,24 kWh · 16,07 kWh",
+        "Technologie": "Lithium fer phosphate (LiFePO4)",
+        "Durée de vie": "Plus de 6 000 cycles",
+        "Mise en parallèle": "Jusqu'à 15 batteries",
+        "Dimensions": "5 kWh : 540 × 460 × 200 mm · 10 kWh : 790 × 530 × 200 mm · 16 kWh : 850 × 550 × 250 mm",
+        "Poids": "44 kg · 87 kg · 130 kg",
+        "Indice de protection": "IP20, IP65 en option",
+        "Pose": "Murale ou au sol",
+        "Références": "WY-100512 · WY-200512 · WY-314512"
       },
       "variantes": [
         {
-          "id": "CE-PV640-U",
-          "label": "À l'unité",
-          "detail": "Pour compléter ou agrandir une installation"
+          "id": "CE-WY-100512",
+          "label": "5 kWh",
+          "detail": "5,12 kWh · 100 Ah · 44 kg"
         },
         {
-          "id": "CE-PV640-PAL",
-          "label": "Palette complète",
-          "detail": "31 panneaux · ≈ 19,8 kWc · le meilleur prix au watt",
+          "id": "CE-WY-200512",
+          "label": "10 kWh",
+          "detail": "10,24 kWh · 200 Ah · 87 kg",
           "recommande": true
+        },
+        {
+          "id": "CE-WY-314512",
+          "label": "16 kWh",
+          "detail": "16,07 kWh · 314 Ah · 130 kg"
         }
       ]
     },
@@ -607,6 +611,7 @@
       "image": "img/boutique/batterie-rack-51v.webp",
       "galerie": [
         "img/boutique/batterie-rack-51v.webp",
+        "img/boutique/batterie-rack-51v-atouts.webp",
         "img/boutique/batterie-rack-51v-duo.webp",
         "img/boutique/batterie-rack-51v-baie.webp"
       ],

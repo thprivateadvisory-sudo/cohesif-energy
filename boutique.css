@@ -36,6 +36,29 @@
   box-shadow: var(--shadow-sm);
 }
 .shop-hero-price svg { color: var(--brand-600); }
+.shop-hero-new {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  color: var(--ink-700);
+  font-size: 15px;
+  font-weight: 500;
+}
+.shop-hero-new span {
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--brand-600);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.shop-hero-new svg { color: var(--brand-600); transition: transform 0.2s ease; }
+.shop-hero-new:hover { color: var(--brand-700); }
+.shop-hero-new:hover svg { transform: translateX(3px); }
 .shop-hero-price strong { color: var(--brand-700); }
 .shop-hero-price a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .shop-hero-ctas { justify-content: flex-start; margin-top: 24px; }
