@@ -60,6 +60,23 @@
   // === FORMULAIRE DE CONTACT (Formspree AJAX) ===
   var contactForm = document.getElementById('contact-form');
   if (contactForm) {
+    // Pré-remplissage depuis la boutique : ?projet=...&produit=...
+    var params = new URLSearchParams(window.location.search);
+    var projet = params.get('projet');
+    var produit = params.get('produit');
+    if (projet) {
+      var select = contactForm.querySelector('select[name="Projet"]');
+      if (select) {
+        Array.prototype.forEach.call(select.options, function (o) {
+          if (o.text === projet) select.value = o.value || o.text;
+        });
+      }
+    }
+    if (produit) {
+      var desc = contactForm.querySelector('textarea[name="Description"]');
+      if (desc && !desc.value) desc.value = 'Je souhaite recevoir le prix de : ' + produit + '\nQuantité : ';
+    }
+
     contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
 

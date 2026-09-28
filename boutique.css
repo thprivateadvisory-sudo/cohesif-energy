@@ -36,6 +36,29 @@
   box-shadow: var(--shadow-sm);
 }
 .shop-hero-price svg { color: var(--brand-600); }
+.shop-hero-new {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  color: var(--ink-700);
+  font-size: 15px;
+  font-weight: 500;
+}
+.shop-hero-new span {
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--brand-600);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.shop-hero-new svg { color: var(--brand-600); transition: transform 0.2s ease; }
+.shop-hero-new:hover { color: var(--brand-700); }
+.shop-hero-new:hover svg { transform: translateX(3px); }
 .shop-hero-price strong { color: var(--brand-700); }
 .shop-hero-price a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .shop-hero-ctas { justify-content: flex-start; margin-top: 24px; }
@@ -219,6 +242,41 @@
 .pro-band-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 .pro-band .btn-outline { background: transparent; color: white; border-color: var(--ink-700); }
 .pro-band .btn-outline:hover { background: var(--ink-800); }
+
+/* === SOLAIRE : DE LA PRODUCTION AU STOCKAGE === */
+.solar-chain {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 768px) { .solar-chain { grid-template-columns: repeat(3, 1fr); } }
+.solar-chain li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: white;
+  border: 1px solid var(--ink-200);
+}
+.solar-chain-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--brand-50);
+  color: var(--brand-600);
+}
+.solar-chain strong { display: block; color: var(--ink-900); margin-bottom: 2px; }
+.solar-chain small { display: block; color: var(--ink-500); font-size: 14px; line-height: 1.45; }
+
+/* === PRIX SUR DEMANDE === */
+.product-card-price-soon strong { font-size: 1.15rem; color: var(--brand-700); }
+.price-main.price-quote { font-size: 2rem; color: var(--brand-700); }
 
 /* === BATTERIES : USAGES === */
 .battery-uses {

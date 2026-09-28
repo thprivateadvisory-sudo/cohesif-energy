@@ -3,7 +3,7 @@
   "site": "https://cohesifenergy.fr",
   "vendeur": "Cohesif Commerce",
   "commandeUrl": "https://cohesifcommerce.fr/commande.html",
-  "misAJour": "2026-09-27",
+  "misAJour": "2026-09-28",
   "produits": [
     {
       "slug": "boutique-borne-recharge-7kw",
@@ -420,6 +420,239 @@
           "label": "Batterie 12 V 100 Ah",
           "detail": "Livrée prête à l'emploi, vis de bornes M8 fournies",
           "prix": 279
+        }
+      ]
+    },
+    {
+      "slug": "boutique-panneau-solaire-640w-biface",
+      "gamme": "solaire",
+      "cible": "Grande toiture · Ombrière · Bâtiment agricole · Au sol",
+      "nom": "Panneau solaire 640 W biface",
+      "accroche": "640 W par panneau, jusqu'à 24,8 % de rendement et une face arrière qui produit aussi grâce à la lumière réfléchie.",
+      "badge": "Haut rendement",
+      "image": "img/boutique/panneau-solaire-640w.webp",
+      "galerie": [
+        "img/boutique/panneau-solaire-640w.webp",
+        "img/boutique/panneau-solaire-640w-atouts.webp",
+        "img/boutique/panneau-solaire-640w-dimensions.webp",
+        "img/boutique/panneau-solaire-640w-face.webp"
+      ],
+      "affichage": "HT",
+      "paiement": "total",
+      "delai": "Délai de livraison confirmé avec votre prix",
+      "livraison": "Livraison sur palette en France métropolitaine",
+      "garantie": "Garantie 2 ans minimum, SAV en France",
+      "autonomie": "≈ 700 à 900 kWh produits par panneau et par an en France, selon la région",
+      "points": [
+        "640 W et 24,8 % de rendement : moins de panneaux pour la même puissance",
+        "Biface : la face arrière capte la lumière réfléchie par le sol ou la toiture, idéal en ombrière et au sol",
+        "Cellules N-type 182 mm à 16 busbars, performantes par forte chaleur et faible luminosité",
+        "Double verre trempé 2 mm : robuste face à la grêle, à l'humidité et au vieillissement",
+        "Boîte de jonction IP68 à 3 diodes et connecteurs compatibles MC4 : pose rapide et fiable",
+        "Parfait pour les ombrières de parking, en complément de nos bornes de recharge"
+      ],
+      "specs": {
+        "Puissance": "640 W (gamme 605 à 640 W)",
+        "Rendement": "Jusqu'à 24,8 %",
+        "Cellules": "N-type 182 mm, 144 demi-cellules (72 × 2), 16 busbars",
+        "Technologie": "Biface double verre",
+        "Verre": "2 × 2 mm trempé, face avant antireflet",
+        "Dimensions": "2278 × 1134 × 35 mm (ou 30 mm)",
+        "Poids": "31,8 kg",
+        "Boîte de jonction": "IP68, 3 diodes bypass",
+        "Câbles et connecteurs": "4 mm², EVO2 compatibles MC4",
+        "Conditionnement": "31 ou 36 panneaux par palette",
+        "Référence": "JAM144D 605-640N"
+      },
+      "variantes": [
+        {
+          "id": "CE-PV640-U",
+          "label": "À l'unité",
+          "detail": "Pour compléter ou agrandir une installation"
+        },
+        {
+          "id": "CE-PV640-PAL",
+          "label": "Palette complète",
+          "detail": "31 panneaux · ≈ 19,8 kWc · le meilleur prix au watt",
+          "recommande": true
+        }
+      ]
+    },
+    {
+      "slug": "boutique-onduleur-hybride-triphase",
+      "gamme": "onduleur",
+      "cible": "Maison triphasée · Atelier · Commerce · Site isolé",
+      "nom": "Onduleur hybride triphasé · 8 à 12 kW",
+      "accroche": "Le cœur de votre installation : il pilote panneaux, batterie et réseau, et bascule en 10 ms en cas de coupure.",
+      "badge": "Nouveau",
+      "image": "img/boutique/onduleur-hybride-spi.webp",
+      "galerie": [
+        "img/boutique/onduleur-hybride-spi.webp",
+        "img/boutique/onduleur-hybride-spi-atouts.webp",
+        "img/boutique/kit-onduleur-batterie.webp"
+      ],
+      "affichage": "HT",
+      "paiement": "total",
+      "delai": "Délai de livraison confirmé avec votre prix",
+      "livraison": "Livraison sur palette en France métropolitaine",
+      "garantie": "Garantie 2 ans minimum, SAV en France",
+      "autonomie": "Jusqu'à 12 kW en continu et 24 kW en pointe : pompe à chaleur, borne de recharge et atelier en même temps",
+      "points": [
+        "Hybride : solaire, batterie et réseau gérés par un seul appareil",
+        "Secours automatique : la maison reste alimentée en cas de coupure, bascule en 10 ms",
+        "Puissance de pointe doublée pendant 10 s pour démarrer pompes, compresseurs et moteurs jusqu'à 6 CV",
+        "Onde sinusoïdale pure : sans risque pour l'électronique et l'électroménager",
+        "Dialogue avec les batteries lithium (BMS) pour une charge optimale et une durée de vie maximale",
+        "Écran de contrôle en façade, installation murale simple"
+      ],
+      "specs": {
+        "Puissance nominale": "8 000 W · 10 000 W · 12 000 W",
+        "Puissance de pointe": "16 000 W · 20 000 W · 24 000 W",
+        "Tension de sortie": "230/400 V AC triphasé",
+        "Fréquence": "50/60 Hz",
+        "Forme d'onde": "Sinusoïdale pure",
+        "Temps de bascule": "10 ms (typique)",
+        "Tension batterie": "48 V DC (plage 40 à 60 V)",
+        "Moteurs": "Jusqu'à 5 CV (8 kW) ou 6 CV (10 et 12 kW)",
+        "Batteries compatibles": "Lithium avec BMS, double activation",
+        "Dimensions": "620 × 445 × 130 mm",
+        "Poids": "27 kg",
+        "Conformité": "Normes de sécurité IEC pour l'Europe",
+        "Références": "SPI-8K-EU · SPI-10K-EU · SPI-12K-EU"
+      },
+      "variantes": [
+        {
+          "id": "CE-SPI-8K",
+          "label": "8 kW",
+          "detail": "Pointe 16 kW · moteurs jusqu'à 5 CV"
+        },
+        {
+          "id": "CE-SPI-10K",
+          "label": "10 kW",
+          "detail": "Pointe 20 kW · moteurs jusqu'à 6 CV",
+          "recommande": true
+        },
+        {
+          "id": "CE-SPI-12K",
+          "label": "12 kW",
+          "detail": "Pointe 24 kW · moteurs jusqu'à 6 CV"
+        }
+      ]
+    },
+    {
+      "slug": "boutique-batterie-stockage-solaire-murale",
+      "gamme": "stockage",
+      "cible": "Maison · Autoconsommation · Secours",
+      "nom": "Batterie solaire murale LiFePO4 · 5 à 16 kWh",
+      "accroche": "Stockez l'électricité de vos panneaux le jour et consommez-la le soir : de 5 à 16 kWh, plus de 6 000 cycles de charge.",
+      "badge": "Nouveau",
+      "image": "img/boutique/batterie-murale-51v.webp",
+      "galerie": [
+        "img/boutique/batterie-murale-51v.webp",
+        "img/boutique/batterie-murale-51v-atouts.webp",
+        "img/boutique/batterie-murale-51v-capacites.webp",
+        "img/boutique/batterie-murale-51v-sol.webp",
+        "img/boutique/kit-onduleur-batterie.webp"
+      ],
+      "affichage": "TTC",
+      "paiement": "total",
+      "delai": "Délai de livraison confirmé avec votre prix",
+      "livraison": "Livraison sur palette en France métropolitaine",
+      "garantie": "Garantie 2 ans minimum, SAV en France",
+      "autonomie": "10 kWh stockés : de quoi alimenter une maison du coucher du soleil au lendemain matin",
+      "points": [
+        "Plus de 6 000 cycles : plus de 15 ans d'usage à raison d'une charge par jour",
+        "Chimie LiFePO4, la plus sûre des technologies lithium : stable, sans risque d'emballement thermique",
+        "Évolutive : jusqu'à 15 batteries en parallèle, commencez petit et ajoutez de la capacité plus tard",
+        "Écran intégré pour suivre la charge d'un coup d'œil",
+        "Compatible avec les onduleurs hybrides 48 V, dont les onduleurs de notre boutique",
+        "Version IP65 disponible pour un garage ou un emplacement exposé"
+      ],
+      "specs": {
+        "Tension nominale": "51,2 V",
+        "Plage de tension": "43,2 à 57,6 V DC",
+        "Capacité": "100 Ah · 200 Ah · 314 Ah",
+        "Énergie": "5,12 kWh · 10,24 kWh · 16,07 kWh",
+        "Technologie": "Lithium fer phosphate (LiFePO4)",
+        "Durée de vie": "Plus de 6 000 cycles",
+        "Mise en parallèle": "Jusqu'à 15 batteries",
+        "Dimensions": "5 kWh : 540 × 460 × 200 mm · 10 kWh : 790 × 530 × 200 mm · 16 kWh : 850 × 550 × 250 mm",
+        "Poids": "44 kg · 87 kg · 130 kg",
+        "Indice de protection": "IP20, IP65 en option",
+        "Pose": "Murale ou au sol",
+        "Références": "WY-100512 · WY-200512 · WY-314512"
+      },
+      "variantes": [
+        {
+          "id": "CE-WY-100512",
+          "label": "5 kWh",
+          "detail": "5,12 kWh · 100 Ah · 44 kg"
+        },
+        {
+          "id": "CE-WY-200512",
+          "label": "10 kWh",
+          "detail": "10,24 kWh · 200 Ah · 87 kg",
+          "recommande": true
+        },
+        {
+          "id": "CE-WY-314512",
+          "label": "16 kWh",
+          "detail": "16,07 kWh · 314 Ah · 130 kg"
+        }
+      ]
+    },
+    {
+      "slug": "boutique-batterie-stockage-rack-lifepo4",
+      "gamme": "stockage",
+      "cible": "Local technique · Entreprise · Site isolé",
+      "nom": "Batterie rack LiFePO4 51,2 V · 5 ou 10 kWh",
+      "accroche": "Le stockage modulaire au format baie 19\" : empilez jusqu'à 15 modules pour construire une réserve de plus de 150 kWh.",
+      "badge": "Modulaire",
+      "image": "img/boutique/batterie-rack-51v.webp",
+      "galerie": [
+        "img/boutique/batterie-rack-51v.webp",
+        "img/boutique/batterie-rack-51v-atouts.webp",
+        "img/boutique/batterie-rack-51v-duo.webp",
+        "img/boutique/batterie-rack-51v-baie.webp"
+      ],
+      "affichage": "HT",
+      "paiement": "total",
+      "delai": "Délai de livraison confirmé avec votre prix",
+      "livraison": "Livraison sur palette en France métropolitaine",
+      "garantie": "Garantie 2 ans minimum, SAV en France",
+      "autonomie": "Jusqu'à 15 modules en parallèle : plus de 150 kWh de stockage avec la version 10 kWh",
+      "points": [
+        "Format rack 19\" standard : s'intègre dans une baie technique ou s'empile au sol",
+        "Plus de 6 000 cycles : un investissement rentabilisé sur plus de 15 ans",
+        "Modulaire : jusqu'à 15 modules en parallèle pour accompagner la croissance de vos besoins",
+        "BMS intégré, écran LCD et interrupteur en façade : état de charge et protections visibles en un coup d'œil",
+        "Ports de communication pour dialoguer avec l'onduleur hybride",
+        "Chimie LiFePO4, la plus sûre des technologies lithium"
+      ],
+      "specs": {
+        "Tension nominale": "51,2 V",
+        "Plage de tension": "43,2 à 57,6 V",
+        "Capacité": "100 Ah · 200 Ah",
+        "Énergie": "5,12 kWh · 10,24 kWh",
+        "Technologie": "Lithium fer phosphate (LiFePO4), BMS intégré",
+        "Durée de vie": "Plus de 6 000 cycles",
+        "Mise en parallèle": "Jusqu'à 15 modules",
+        "Dimensions": "5 kWh : 430 × 482 × 178 mm · 10 kWh : 790 × 482 × 178 mm",
+        "Poids": "41 kg · 98 kg",
+        "Indice de protection": "IP20, IP65 en option",
+        "Références": "RY-100512 · RY-200512"
+      },
+      "variantes": [
+        {
+          "id": "CE-RY-100512",
+          "label": "5 kWh",
+          "detail": "5,12 kWh · 100 Ah · 41 kg",
+          "recommande": true
+        },
+        {
+          "id": "CE-RY-200512",
+          "label": "10 kWh",
+          "detail": "10,24 kWh · 200 Ah · 98 kg"
         }
       ]
     }

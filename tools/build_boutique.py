@@ -26,6 +26,7 @@ PRODUITS = DATA["produits"]
 TVA = 0.20
 
 HYPERWATT = "Hyperwatt (Jsowell New Energy), présent dans plus de 60 pays"
+JINGSUN = "Jingsun New Energy and Technology (Hefei, Chine)"
 # Libellés propres à chaque gamme (données structurées, fiche produit)
 GAMMES = {
     "ac": {"categorie": "Borne de recharge pour véhicule électrique", "marque": "Hyperwatt", "fabricant": HYPERWATT,
@@ -34,7 +35,18 @@ GAMMES = {
            "legende": "Choisissez la puissance", "pourquoi": "Pourquoi cette borne", "dispo": "MadeToOrder"},
     "batterie": {"categorie": "Batterie lithium LiFePO4", "marque": None, "fabricant": None,
                  "legende": "Votre batterie", "pourquoi": "Pourquoi cette batterie", "dispo": "InStock"},
+    "stockage": {"categorie": "Batterie de stockage solaire LiFePO4", "marque": "Jingsun", "fabricant": JINGSUN,
+                 "legende": "Choisissez la capacité", "pourquoi": "Pourquoi cette batterie", "dispo": "PreOrder",
+                 "projet": "Pompe à chaleur / Stockage"},
+    "onduleur": {"categorie": "Onduleur solaire hybride", "marque": "Jingsun", "fabricant": JINGSUN,
+                 "legende": "Choisissez la puissance", "pourquoi": "Pourquoi cet onduleur", "dispo": "PreOrder",
+                 "projet": "Panneaux solaires"},
+    "solaire": {"categorie": "Panneau solaire photovoltaïque", "marque": "Jingsun", "fabricant": JINGSUN,
+                "legende": "Votre commande", "pourquoi": "Pourquoi ce panneau", "dispo": "PreOrder",
+                "projet": "Panneaux solaires"},
 }
+# Bornes d'un côté, énergie solaire et stockage de l'autre (suggestions « Vous aimerez aussi »)
+FAMILLE = {"ac": "borne", "dc": "borne", "batterie": "energie", "stockage": "energie", "onduleur": "energie", "solaire": "energie"}
 
 ref = (ROOT / "bornes-recharge.html").read_text(encoding="utf-8")
 HEADER = ref[ref.index('<header class="header">'):ref.index("<main>")]
@@ -52,8 +64,20 @@ def eur(n, decimals=False):
     return s + " €"
 
 
+def a_prix(p):
+    """Tant que le tarif n'est pas renseigné, le produit s'affiche « prix sur demande » sans bouton d'achat."""
+    return all(v.get("prix") is not None for v in p["variantes"])
+
+
 def prix_min(p):
     return min(v["prix"] for v in p["variantes"])
+
+
+def devis_url(p, v=None):
+    from urllib.parse import quote
+    nom = p["nom"] + (f" — {v['label']}" if v and len(p["variantes"]) > 1 else "")
+    return (f"./contact-devis.html?projet={quote(GAMMES[p['gamme']].get('projet', 'Plusieurs solutions / Je ne sais pas encore'))}"
+            f"&amp;produit={quote(nom)}")
 
 
 def ttc(p, prix):
@@ -167,9 +191,15 @@ def card(p):
     pts = "".join(f"<li>{icon('check', 14, 2.5)}{e(x)}</li>" for x in p["points"][:3])
     tax = "TTC" if p["affichage"] == "TTC" else "HT"
     variants = ""
-    if p["gamme"] == "dc" and n > 1:
+    if p["gamme"] != "ac" and n > 1:
         variants = '<div class="card-variants">' + "".join(
             f'<span>{e(v["label"])}</span>' for v in p["variantes"]) + "</div>"
+    if a_prix(p):
+        price_html = f'<div class="product-card-price"><small>{frm}</small><strong>{eur(prix_min(p))}</strong> <span>{tax}</span></div>'
+        cta_html = f'<a href="{buy_url(first["id"])}" class="btn btn-primary btn-sm" data-buy>Acheter</a>'
+    else:
+        price_html = '<div class="product-card-price product-card-price-soon"><small>Tarif</small><strong>Sur demande</strong></div>'
+        cta_html = f'<a href="{devis_url(p)}" class="btn btn-primary btn-sm">Obtenir le prix</a>'
     return f"""
       <article class="product-card" data-gamme="{p['gamme']}">
         <a href="./{p['slug']}.html" class="product-card-media" aria-label="{e(p['nom'])}">
@@ -182,10 +212,10 @@ def card(p):
           {variants}
           <ul class="product-card-points">{pts}</ul>
           <div class="product-card-foot">
-            <div class="product-card-price"><small>{frm}</small><strong>{eur(prix_min(p))}</strong> <span>{tax}</span></div>
+            {price_html}
             <div class="product-card-ctas">
               <a href="./{p['slug']}.html" class="btn btn-outline btn-sm">Détails</a>
-              <a href="{buy_url(first['id'])}" class="btn btn-primary btn-sm" data-buy>Acheter</a>
+              {cta_html}
             </div>
           </div>
           <div class="product-card-delivery">{icon('truck', 14)} {e(p['livraison'])}</div>
@@ -210,7 +240,7 @@ def faq_ld(items):
 
 FAQ_BOUTIQUE = [
     ("Qui vend et expédie les produits ?",
-     "Les bornes et batteries sont sélectionnées par Cohesif Energy et vendues par <strong>Cohesif Commerce</strong>, la société de commerce du Groupe Cohesif. "
+     "Les bornes, batteries et équipements solaires sont sélectionnés par Cohesif Energy et vendues par <strong>Cohesif Commerce</strong>, la société de commerce du Groupe Cohesif. "
      "Lorsque vous cliquez sur « Acheter », vous êtes dirigé vers la page de commande sécurisée de Cohesif Commerce, puis vers le paiement Stripe."),
     ("Le paiement est-il sécurisé ?",
      "Oui. Le paiement est traité par <strong>Stripe</strong>, qui gère aussi les paiements d'Amazon, Uber ou Decathlon. "
@@ -235,6 +265,13 @@ FAQ_BOUTIQUE = [
     ("Puis-je retourner ma borne ?",
      "Oui : en tant que particulier, vous disposez de <strong>14 jours</strong> après réception pour vous rétracter, conformément au Code de la consommation. "
      "La borne doit être retournée non installée, dans son emballage d'origine."),
+    ("Pouvez-vous installer les panneaux, l'onduleur et la batterie ?",
+     "Oui. Vous pouvez acheter le matériel seul pour votre installateur, ou confier le projet complet à nos équipes <strong>certifiées RGE QualiPV</strong> : "
+     "étude, dimensionnement, pose, déclarations et mise en service. La pose par un installateur RGE est aussi la condition pour bénéficier de la prime à l'autoconsommation "
+     "et du tarif de rachat du surplus. <a href=\"./panneaux-solaires.html\">En savoir plus sur nos installations solaires</a>."),
+    ("Les batteries et l'onduleur sont-ils compatibles entre eux ?",
+     "Oui : les batteries de stockage 51,2 V et les onduleurs hybrides de la boutique fonctionnent sur un bus <strong>48 V</strong> et viennent du même fabricant. "
+     "Pour ajouter une batterie à une installation existante, envoyez-nous la référence de votre onduleur : nous vérifions la compatibilité gratuitement."),
     ("Proposez-vous un financement ou des tarifs par quantité ?",
      "Oui. Pour les entreprises, les bornes peuvent être financées en location via <a href=\"https://cohesifleasing.fr\" target=\"_blank\" rel=\"noopener noreferrer\">Cohesif Leasing</a>. "
      "À partir de 3 bornes, <a href=\"./contact-devis.html\">demandez un devis</a> : nous appliquons un tarif dégressif."),
@@ -245,15 +282,16 @@ def build_boutique():
     ac = [p for p in PRODUITS if p["gamme"] == "ac"]
     dc = [p for p in PRODUITS if p["gamme"] == "dc"]
     bat = [p for p in PRODUITS if p["gamme"] == "batterie"]
+    solaire = [p for p in PRODUITS if FAMILLE[p["gamme"]] == "energie" and p["gamme"] != "batterie"]
     min_ac = min(prix_min(p) for p in ac)
     min_bat = min(prix_min(p) for p in bat)
     itemlist = {
         "@context": "https://schema.org", "@type": "ItemList", "name": "Boutique Cohesif Energy — bornes de recharge et batteries",
         "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/{p['slug']}.html", "name": p["nom"]}
                             for i, p in enumerate(PRODUITS)]}
-    title = "Boutique bornes de recharge et batteries lithium — achat en ligne | Cohesif Energy"
+    title = "Boutique bornes de recharge, batteries et solaire — achat en ligne | Cohesif Energy"
     desc = (f"Achetez votre borne de recharge en ligne dès {round(min_ac)} € TTC : 7 kW, 22 kW, bornes rapides DC jusqu'à 240 kW. "
-            f"Batteries lithium LiFePO4 dès {round(min_bat)} € TTC. Livraison offerte, paiement sécurisé, garantie 2 ans.")
+            f"Batteries lithium LiFePO4 dès {round(min_bat)} € TTC, panneaux solaires, onduleurs hybrides et batteries de stockage. Paiement sécurisé, garantie 2 ans.")
     out = head(title, desc, "boutique.html", "img/boutique/gamme.webp", [itemlist, faq_ld(FAQ_BOUTIQUE)])
     out += f"""
 <section class="shop-hero">
@@ -261,12 +299,13 @@ def build_boutique():
     <div class="shop-hero-text">
       <div class="eyebrow">Boutique en ligne</div>
       <h1>Votre borne de recharge, <span class="gradient-text">livrée chez vous</span>, posée si vous le souhaitez.</h1>
-      <p class="shop-hero-desc">Bornes maison 7 et 22 kW, bornes rapides DC jusqu'à 240 kW pour les professionnels, batteries lithium pour le solaire et les loisirs. Prix affichés, paiement sécurisé en quelques clics, sans attendre de devis.</p>
+      <p class="shop-hero-desc">Bornes maison 7 et 22 kW, bornes rapides DC jusqu'à 240 kW pour les professionnels, batteries lithium, panneaux solaires, onduleurs hybrides et stockage d'énergie. Paiement sécurisé en quelques clics, conseil gratuit par nos experts.</p>
       <div class="shop-hero-price">{icon('bolt', 18)}<span>Borne maison dès <strong>{eur(min_ac)} TTC</strong> · <a href="#batteries">batterie lithium</a> dès <strong>{eur(min_bat)} TTC</strong></span></div>
       <div class="hero-ctas shop-hero-ctas">
         <a href="#maison" class="btn btn-primary btn-lg btn-arrow">Bornes pour la maison {icon('arrow', 14, 2.5)}</a>
         <a href="#pro" class="btn btn-outline btn-lg">Bornes rapides pro</a>
       </div>
+      <a href="#solaire" class="shop-hero-new"><span>Nouveau</span>Panneaux solaires, onduleurs hybrides et batteries de stockage {icon('arrow', 14, 2.5)}</a>
     </div>
     <div class="shop-hero-visual">
       <img src="./img/boutique/gamme.webp" alt="Gamme de bornes de recharge AC et DC" width="1400" height="1187" />
@@ -348,6 +387,35 @@ def build_boutique():
   </div>
 </section>
 
+<section class="section section-subtle shop-section" id="solaire">
+  <div class="container">
+    <div class="shop-section-head">
+      <div>
+        <div class="eyebrow">Solaire et stockage</div>
+        <h2>Produisez et stockez votre propre électricité</h2>
+        <p>Panneaux haut rendement, onduleurs hybrides et batteries LiFePO4 : les trois briques d'une installation solaire qui vous rend moins dépendant du réseau et des hausses de prix. Matériel seul pour votre installateur, ou pose clé en main par nos équipes RGE QualiPV.</p>
+      </div>
+    </div>
+    <ol class="solar-chain">
+      <li><span class="solar-chain-icon">{icon('sun', 22)}</span><div><strong>1. Les panneaux produisent</strong><small>Jusqu'à 640 W par panneau, et la face arrière biface capte aussi la lumière réfléchie.</small></div></li>
+      <li><span class="solar-chain-icon">{icon('bolt', 22)}</span><div><strong>2. L'onduleur pilote</strong><small>Il alimente la maison, charge la batterie et bascule en 10 ms en cas de coupure.</small></div></li>
+      <li><span class="solar-chain-icon">{icon('home', 22)}</span><div><strong>3. La batterie stocke</strong><small>L'énergie du midi est consommée le soir et la nuit, au lieu d'être achetée au réseau.</small></div></li>
+    </ol>
+    <div class="product-grid product-grid-2">{''.join(card(p) for p in solaire)}
+    </div>
+    <div class="pro-band">
+      <div>
+        <h3>Une installation complète, dimensionnée pour vous ?</h3>
+        <p>Nous calculons la puissance, la capacité de batterie et la rentabilité à partir de vos factures. Pose par nos installateurs RGE QualiPV, éligible à la prime à l'autoconsommation.</p>
+      </div>
+      <div class="pro-band-ctas">
+        <a href="./contact-devis.html?projet=Panneaux%20solaires" class="btn btn-primary btn-arrow">Étude solaire gratuite {icon('arrow', 14, 2.5)}</a>
+        <a href="./panneaux-solaires.html" class="btn btn-outline">Nos installations solaires</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
     <div class="section-intro">
@@ -355,10 +423,10 @@ def build_boutique():
       <h2>Commander en 4 étapes</h2>
     </div>
     <ol class="shop-steps">
-      <li><span>1</span><h3>Choisissez votre borne</h3><p>Borne seule ou avec pose, en fonction de votre installation.</p></li>
+      <li><span>1</span><h3>Choisissez votre équipement</h3><p>Borne, batterie ou matériel solaire, seul ou avec pose selon votre installation.</p></li>
       <li><span>2</span><h3>Payez en ligne</h3><p>Paiement sécurisé Stripe : CB, Apple Pay, Google Pay. Facture envoyée par e-mail.</p></li>
-      <li><span>3</span><h3>Livraison ou pose</h3><p>Livraison offerte, ou visite de nos électriciens IRVE pour l'installation.</p></li>
-      <li><span>4</span><h3>Rechargez</h3><p>Branchez votre véhicule. Notre SAV reste joignable pendant toute la garantie.</p></li>
+      <li><span>3</span><h3>Livraison ou pose</h3><p>Livraison chez vous, ou installation par nos électriciens IRVE et installateurs RGE.</p></li>
+      <li><span>4</span><h3>Profitez-en</h3><p>Rechargez, produisez, stockez. Notre SAV reste joignable pendant toute la garantie.</p></li>
     </ol>
   </div>
 </section>
@@ -420,7 +488,58 @@ POSE_INCLUS = [
 ]
 
 
+RETRACTATION = ("Puis-je me rétracter ?",
+                "Oui, les particuliers disposent de 14 jours après réception pour se rétracter. Le produit doit être retourné non installé, dans son emballage d'origine.")
+PRIX = ("Comment obtenir le prix ?",
+        "Cliquez sur « Obtenir mon prix » et indiquez la version et la quantité souhaitées : un conseiller vous envoie votre tarif sous 48 h ouvrées, "
+        "avec un prix dégressif pour les commandes en volume et les installations complètes.")
+
+
 def product_faq(p):
+    if p["gamme"] == "stockage":
+        return [
+            ("Quelle capacité choisir ?",
+             "Un foyer français consomme en moyenne 12 à 15 kWh par jour, dont une bonne partie le soir et la nuit. "
+             "La version <strong>5 kWh</strong> convient à un petit foyer ou à une installation de 3 kWc, la <strong>10 kWh</strong> couvre la plupart des maisons (6 à 9 kWc), "
+             "la <strong>16 kWh</strong> vise les grandes maisons, les pompes à chaleur et les usages professionnels. Envoyez-nous vos factures : nous dimensionnons gratuitement."),
+            ("Est-elle compatible avec mon onduleur ?",
+             "Elle fonctionne avec les onduleurs hybrides <strong>48 V</strong> : c'est le cas des onduleurs hybrides de notre boutique, du même fabricant. "
+             "Pour un autre onduleur, envoyez-nous sa référence : nous vérifions gratuitement."),
+            ("Peut-on augmenter la capacité plus tard ?",
+             "Oui : jusqu'à 15 batteries peuvent être installées en parallèle. Vous commencez avec 5 ou 10 kWh et ajoutez des modules quand vos besoins évoluent (pompe à chaleur, véhicule électrique…)."),
+            ("Où l'installer ?",
+             "Dans un garage, un cellier ou un local technique, à l'abri du gel et du soleil direct. Une version IP65 est disponible pour les emplacements plus exposés."),
+            PRIX,
+        ]
+    if p["gamme"] == "onduleur":
+        return [
+            ("Qu'est-ce qu'un onduleur hybride ?",
+             "C'est un onduleur qui gère à la fois vos panneaux solaires, votre batterie et le réseau. Il alimente la maison en priorité avec le solaire, "
+             "stocke le surplus dans la batterie et prend le relais automatiquement en cas de coupure de courant."),
+            ("8, 10 ou 12 kW : quelle puissance choisir ?",
+             "La puissance dépend de ce que vous voulez alimenter en même temps. <strong>8 kW</strong> pour une maison classique, <strong>10 kW</strong> avec une pompe à chaleur ou une borne de recharge, "
+             "<strong>12 kW</strong> pour les grandes maisons, les ateliers et les commerces. Notre équipe vous conseille gratuitement."),
+            ("Faut-il être en triphasé ?",
+             "Oui, ces modèles délivrent du 230/400 V triphasé. Si votre compteur est en monophasé, contactez-nous : nous vous orientons vers la solution adaptée."),
+            ("Qui peut l'installer ?",
+             "L'installation doit être réalisée par un électricien qualifié. Nos installateurs RGE QualiPV la prennent en charge de A à Z, déclarations comprises."),
+            PRIX,
+        ]
+    if p["gamme"] == "solaire":
+        return [
+            ("Combien de panneaux me faut-il ?",
+             "En France, un panneau de 640 W produit environ <strong>700 à 900 kWh par an</strong> selon la région et l'orientation. "
+             "Une installation de 6 kWc (10 panneaux) couvre une grande partie des besoins d'une maison. Nous dimensionnons votre projet gratuitement."),
+            ("Ce panneau convient-il à ma toiture ?",
+             "Avec ses 2,28 m × 1,13 m, il est idéal pour les grandes toitures, les bâtiments agricoles et professionnels, les ombrières de parking et les installations au sol. "
+             "Pour une petite toiture de maison, demandez conseil : nous vérifions l'implantation."),
+            ("Qu'apporte la technologie biface ?",
+             "La face arrière capte la lumière réfléchie par le sol, la toiture ou la neige. Sur une ombrière ou une installation au sol, "
+             "le gain de production atteint couramment 5 à 15 % par rapport à un panneau classique."),
+            ("Comment sont-ils livrés ?",
+             "À l'unité ou par palette complète, sur palette filmée, en France métropolitaine. La palette est la solution la plus économique pour les installations professionnelles."),
+            PRIX,
+        ]
     if p["gamme"] == "batterie":
         return [
             ("Puis-je remplacer ma batterie plomb ou AGM par celle-ci ?",
@@ -461,12 +580,14 @@ def product_faq(p):
 
 def build_product(p):
     # Sélection par défaut : la variante la moins chère, cohérente avec le « à partir de » des cartes
-    rec = min(p["variantes"], key=lambda v: v["prix"])
+    vendu = a_prix(p)
+    rec = min(p["variantes"], key=lambda v: v["prix"]) if vendu else next(
+        (v for v in p["variantes"] if v.get("recommande")), p["variantes"][0])
     tax = p["affichage"]
     url = f"{SITE}/{p['slug']}.html"
     g = GAMMES[p["gamme"]]
     offers = []
-    for v in p["variantes"]:
+    for v in (p["variantes"] if a_prix(p) else []):
         offers.append({
             "@type": "Offer", "sku": v["id"], "name": f"{p['nom']} — {v['label']}",
             "price": f"{ttc(p, v['prix']):.2f}", "priceCurrency": "EUR",
@@ -479,15 +600,21 @@ def build_product(p):
     }
     if g["marque"]:
         product_ld["brand"] = {"@type": "Brand", "name": g["marque"]}
-    product_ld.update({"category": g["categorie"], "offers": offers})
+    product_ld["category"] = g["categorie"]
+    if vendu:
+        product_ld["offers"] = offers
     crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Accueil", "item": f"{SITE}/"},
         {"@type": "ListItem", "position": 2, "name": "Boutique", "item": f"{SITE}/boutique.html"},
         {"@type": "ListItem", "position": 3, "name": p["nom"], "item": url}]}
     faq = product_faq(p)
-    price_txt = f"dès {round(prix_min(p))} € {tax}"
-    title = f"{p['nom']} — {price_txt}, achat en ligne | Cohesif Energy"
-    desc = f"{p['accroche']} {p['livraison']}. {p['garantie']}. Paiement sécurisé."
+    if vendu:
+        price_txt = f"dès {round(prix_min(p))} € {tax}"
+        title = f"{p['nom']} — {price_txt}, achat en ligne | Cohesif Energy"
+        desc = f"{p['accroche']} {p['livraison']}. {p['garantie']}. Paiement sécurisé."
+    else:
+        title = f"{p['nom']} — prix et fiche technique | Cohesif Energy"
+        desc = f"{p['accroche']} {p['livraison']}. {p['garantie']}. Votre prix sous 48 h."
     out = head(title, desc, f"{p['slug']}.html", p["image"], [product_ld, crumbs, faq_ld(faq)])
 
     thumbs = "".join(
@@ -497,7 +624,8 @@ def build_product(p):
     vopts = []
     for v in p["variantes"]:
         checked = " checked" if v is rec else ""
-        data = (f'data-id="{v["id"]}" data-prix="{v["prix"]}" data-label="{e(v["label"])}"')
+        data = (f'data-id="{v["id"]}" data-prix="{v["prix"]}" data-label="{e(v["label"])}"' if vendu else
+                f'data-id="{v["id"]}" data-label="{e(v["label"])}" data-devis="{devis_url(p, v)}"')
         tag = '<span class="variant-tag">Recommandé</span>' if v.get("recommande") and len(p["variantes"]) > 1 else ""
         vopts.append(f"""
           <label class="variant">
@@ -505,7 +633,7 @@ def build_product(p):
             <span class="variant-box">
               <span class="variant-top"><strong>{e(v['label'])}</strong>{tag}</span>
               <span class="variant-detail">{e(v['detail'])}</span>
-              <span class="variant-price">{eur(v['prix'])} {tax}</span>
+              {f'<span class="variant-price">{eur(v["prix"])} {tax}</span>' if vendu else ''}
             </span>
           </label>""")
 
@@ -519,7 +647,10 @@ def build_product(p):
           <p>Un technicien vous contacte sous 48 h ouvrées après la commande pour valider votre installation sur photos. Si elle sort du forfait, nous vous proposons un devis : vous restez libre de le refuser et d'être remboursé de la pose.</p>
         </div>"""
 
-    if p["paiement"] == "acompte":
+    if not vendu:
+        pay_note = ""
+        buy_label = "Obtenir mon prix"
+    elif p["paiement"] == "acompte":
         pay_note = (f'<div class="deposit-note" data-deposit data-pct="{p["acomptePct"]}">{icon("euro", 16)} '
                     f'<span>Acompte de {p["acomptePct"]} % à la commande : <strong data-deposit-amount></strong> TTC. '
                     f'Solde par virement avant expédition.</span></div>')
@@ -528,11 +659,26 @@ def build_product(p):
         pay_note = ""
         buy_label = "Acheter maintenant"
 
+    if vendu:
+        price_html = price_block(p, rec["prix"])
+        buy_href = buy_url(rec["id"])
+        sticky_price = f"{eur(rec['prix'])} {tax}"
+        seller = ("Vendu et expédié par <strong>Cohesif Commerce</strong>, société du Groupe Cohesif. "
+                  "Vous finaliserez votre commande sur sa page de paiement sécurisée.")
+        help_txt = "Une question avant d'acheter ? Un conseiller vous répond sous 48 h"
+    else:
+        price_html = ('<span class="price-main price-quote">Prix sur demande</span>'
+                      '<span class="price-sub">Votre tarif personnalisé sous 48 h ouvrées, dégressif selon la quantité.</span>')
+        buy_href = devis_url(p, rec)
+        sticky_price = "Prix sur demande"
+        seller = ("Sélectionné par <strong>Cohesif Energy</strong>, vendu par <strong>Cohesif Commerce</strong>, société du Groupe Cohesif. "
+                  "Gratuit et sans engagement.")
+        help_txt = "Besoin d'aide pour choisir ? Un conseiller dimensionne votre projet gratuitement"
     points = "".join(f"<li>{icon('check', 18, 2.5)}<span>{e(x)}</span></li>" for x in p["points"])
     specs = "".join(f"<tr><th>{e(k)}</th><td>{e(v)}</td></tr>" for k, v in p["specs"].items())
     others = [o for o in PRODUITS if o is not p]
-    others = sorted(others, key=lambda o: (o["gamme"] != p["gamme"]))[:3]
-    bornes = [o for o in others + [p] if o["gamme"] != "batterie"]
+    others = sorted(others, key=lambda o: (FAMILLE[o["gamme"]] != FAMILLE[p["gamme"]], o["gamme"] != p["gamme"]))[:3]
+    bornes = [o for o in others + [p] if FAMILLE[o["gamme"]] == "borne"]
     autres = "Les autres bornes" if len(bornes) == len(others) + 1 else "Nos autres produits"
     fabricant = f"\n        <tr><th>Fabricant</th><td>{e(g['fabricant'])}</td></tr>" if g["fabricant"] else ""
 
@@ -540,7 +686,8 @@ def build_product(p):
         ("truck", p["livraison"]),
         ("clock", p["delai"]),
         ("shield", p["garantie"]),
-        ("lock", "Paiement sécurisé Stripe : CB, Apple Pay, Google Pay"),
+        ("lock", "Paiement sécurisé Stripe : CB, Apple Pay, Google Pay") if vendu else
+        ("tool", "Pose clé en main possible par nos installateurs RGE QualiPV"),
     ]
     reass = "".join(f"<li>{icon(i, 18)}<span>{e(t)}</span></li>" for i, t in reassurance)
 
@@ -549,7 +696,7 @@ def build_product(p):
   <a href="./index.html">Accueil</a><span>/</span><a href="./boutique.html">Boutique</a><span>/</span><span aria-current="page">{e(p['nom'])}</span>
 </nav>
 
-<section class="pdp" data-product data-tax="{tax}" data-tva="{TVA}" data-commande="{COMMANDE}">
+<section class="pdp" data-product data-vendu="{'1' if vendu else '0'}" data-tax="{tax}" data-tva="{TVA}" data-commande="{COMMANDE}">
   <div class="container pdp-grid">
     <div class="pdp-gallery">
       <div class="gallery-main">
@@ -565,7 +712,7 @@ def build_product(p):
       <p class="pdp-lead">{e(p['accroche'])}</p>
       <div class="pdp-range">{icon('bolt', 16)} {e(p['autonomie'])}</div>
 
-      <div class="pdp-price" data-price-block>{price_block(p, rec['prix'])}</div>
+      <div class="pdp-price" data-price-block>{price_html}</div>
       {pay_note}
 
       <fieldset class="variants">
@@ -574,9 +721,9 @@ def build_product(p):
       </fieldset>
       {pose_block}
 
-      <a href="{buy_url(rec['id'])}" class="btn btn-primary btn-lg btn-block pdp-buy" data-buy-main>{icon('cart', 18)} {buy_label}</a>
-      <p class="pdp-seller">Vendu et expédié par <strong>Cohesif Commerce</strong>, société du Groupe Cohesif. Vous finaliserez votre commande sur sa page de paiement sécurisée.</p>
-      <a href="./contact-devis.html" class="pdp-help">{icon('phone', 16)} Une question avant d'acheter ? Un conseiller vous répond sous 48 h</a>
+      <a href="{buy_href}" class="btn btn-primary btn-lg btn-block pdp-buy" data-buy-main>{icon('cart' if vendu else 'euro', 18)} {buy_label}</a>
+      <p class="pdp-seller">{seller}</p>
+      <a href="./contact-devis.html" class="pdp-help">{icon('phone', 16)} {help_txt}</a>
 
       <ul class="pdp-reassurance">{reass}</ul>
     </div>
@@ -619,8 +766,8 @@ def build_product(p):
 </section>
 
 <div class="sticky-buy" data-sticky-buy>
-  <div class="sticky-buy-info"><strong>{e(p['nom'])}</strong><span data-sticky-price>{eur(rec['prix'])} {tax}</span></div>
-  <a href="{buy_url(rec['id'])}" class="btn btn-primary" data-buy-sticky>{buy_label}</a>
+  <div class="sticky-buy-info"><strong>{e(p['nom'])}</strong><span data-sticky-price>{sticky_price}</span></div>
+  <a href="{buy_href}" class="btn btn-primary" data-buy-sticky>{buy_label}</a>
 </div>
 """
     out += TAIL
@@ -652,8 +799,10 @@ def sync_commerce():
     dest = ROOT.parent / "Cohesif-commerce" / "data" / "catalogues"
     if dest.parent.parent.exists():
         dest.mkdir(parents=True, exist_ok=True)
+        # Seuls les produits dont le prix est renseigné peuvent être commandés
+        data = dict(DATA, produits=[p for p in PRODUITS if a_prix(p)])
         (dest / "cohesif-energy.json").write_text(
-            json.dumps(DATA, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(f"Catalogue copié vers {dest / 'cohesif-energy.json'}")
 
 

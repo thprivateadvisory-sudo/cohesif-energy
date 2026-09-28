@@ -48,6 +48,13 @@
   function render() {
     var input = product.querySelector('input[name="variante"]:checked');
     if (!input) return;
+    // Prix pas encore en ligne : le bouton mène à la demande de prix de la version choisie
+    if (product.getAttribute('data-vendu') === '0') {
+      var devis = input.getAttribute('data-devis');
+      if (buyMain) buyMain.setAttribute('href', devis);
+      if (buySticky) buySticky.setAttribute('href', devis);
+      return;
+    }
     var prix = parseFloat(input.getAttribute('data-prix'));
     var id = input.value;
     var html = '<span class="price-main">' + eur(prix) + '</span><span class="price-tax">' + tax + '</span>';
