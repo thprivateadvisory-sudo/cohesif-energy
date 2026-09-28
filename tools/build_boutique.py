@@ -84,6 +84,15 @@ def ttc(p, prix):
     return prix if p["affichage"] == "TTC" else prix * (1 + TVA)
 
 
+WHATSAPP = "33756855727"
+
+
+def whatsapp_url(p):
+    from urllib.parse import quote
+    message = "Bonjour, j’ai une question sur : " + p["nom"]
+    return f"https://wa.me/{WHATSAPP}?text={quote(message)}"
+
+
 def buy_url(vid):
     return f"{COMMANDE}?produit={vid}&amp;source=cohesifenergy"
 
@@ -194,7 +203,13 @@ def card(p):
     if p["gamme"] != "ac" and n > 1:
         variants = '<div class="card-variants">' + "".join(
             f'<span>{e(v["label"])}</span>' for v in p["variantes"]) + "</div>"
-    if a_prix(p):
+    details = f'<a href="./{p["slug"]}.html" class="btn btn-outline btn-sm">Détails</a>'
+    if a_prix(p) and n > 1:
+        # Plusieurs versions (puissance, pose…) : le client choisit sur la fiche au lieu de payer une version imposée
+        price_html = f'<div class="product-card-price"><small>{frm}</small><strong>{eur(prix_min(p))}</strong> <span>{tax}</span></div>'
+        details = ""
+        cta_html = f'<a href="./{p["slug"]}.html" class="btn btn-primary btn-sm btn-arrow">Choisir ma version {icon("arrow", 12, 2.5)}</a>'
+    elif a_prix(p):
         price_html = f'<div class="product-card-price"><small>{frm}</small><strong>{eur(prix_min(p))}</strong> <span>{tax}</span></div>'
         cta_html = f'<a href="{buy_url(first["id"])}" class="btn btn-primary btn-sm" data-buy>Acheter</a>'
     else:
@@ -214,7 +229,7 @@ def card(p):
           <div class="product-card-foot">
             {price_html}
             <div class="product-card-ctas">
-              <a href="./{p['slug']}.html" class="btn btn-outline btn-sm">Détails</a>
+              {details}
               {cta_html}
             </div>
           </div>
@@ -278,6 +293,20 @@ FAQ_BOUTIQUE = [
 ]
 
 
+def shop_cats(ac, dc, bat):
+    """Rayons cliquables dans le hero : le visiteur voit tout le catalogue et ses prix dès l'arrivée."""
+    min_dc = min(prix_min(p) for p in dc)
+    cats = [
+        ("#maison", "img/boutique/ac-7kw.webp", "Bornes maison", f"dès {eur(min(prix_min(p) for p in ac))} TTC"),
+        ("#pro", "img/boutique/dc-sur-pied.webp", "Bornes rapides pro", f"dès {eur(min_dc)} HT"),
+        ("#batteries", "img/boutique/batterie-lifepo4-100ah.webp", "Batteries lithium", f"dès {eur(min(prix_min(p) for p in bat))} TTC"),
+        ("#solaire", "img/boutique/panneau-solaire-640w.webp", "Solaire et stockage", "Nouveau"),
+    ]
+    return "".join(
+        f'\n        <a href="{h}" class="shop-cat"><img src="./{img}" alt="" width="1000" height="1000" />'
+        f'<span><strong>{e(t)}</strong><small>{e(s)}</small></span></a>' for h, img, t, s in cats)
+
+
 def build_boutique():
     ac = [p for p in PRODUITS if p["gamme"] == "ac"]
     dc = [p for p in PRODUITS if p["gamme"] == "dc"]
@@ -300,12 +329,8 @@ def build_boutique():
       <div class="eyebrow">Boutique en ligne</div>
       <h1>Votre borne de recharge, <span class="gradient-text">livrée chez vous</span>, posée si vous le souhaitez.</h1>
       <p class="shop-hero-desc">Bornes maison 7 et 22 kW, bornes rapides DC jusqu'à 240 kW pour les professionnels, batteries lithium, panneaux solaires, onduleurs hybrides et stockage d'énergie. Paiement sécurisé en quelques clics, conseil gratuit par nos experts.</p>
-      <div class="shop-hero-price">{icon('bolt', 18)}<span>Borne maison dès <strong>{eur(min_ac)} TTC</strong> · <a href="#batteries">batterie lithium</a> dès <strong>{eur(min_bat)} TTC</strong></span></div>
-      <div class="hero-ctas shop-hero-ctas">
-        <a href="#maison" class="btn btn-primary btn-lg btn-arrow">Bornes pour la maison {icon('arrow', 14, 2.5)}</a>
-        <a href="#pro" class="btn btn-outline btn-lg">Bornes rapides pro</a>
-      </div>
-      <a href="#solaire" class="shop-hero-new"><span>Nouveau</span>Panneaux solaires, onduleurs hybrides et batteries de stockage {icon('arrow', 14, 2.5)}</a>
+      <nav class="shop-cats" aria-label="Rayons de la boutique">{shop_cats(ac, dc, bat)}
+      </nav>
     </div>
     <div class="shop-hero-visual">
       <img src="./img/boutique/gamme.webp" alt="Gamme de bornes de recharge AC et DC" width="1400" height="1187" />
@@ -665,7 +690,7 @@ def build_product(p):
         sticky_price = f"{eur(rec['prix'])} {tax}"
         seller = ("Vendu et expédié par <strong>Cohesif Commerce</strong>, société du Groupe Cohesif. "
                   "Vous finaliserez votre commande sur sa page de paiement sécurisée.")
-        help_txt = "Une question avant d'acheter ? Un conseiller vous répond sous 48 h"
+        help_txt = "Une question avant d'acheter ? Réponse rapide sur WhatsApp"
     else:
         price_html = ('<span class="price-main price-quote">Prix sur demande</span>'
                       '<span class="price-sub">Votre tarif personnalisé sous 48 h ouvrées, dégressif selon la quantité.</span>')
@@ -674,6 +699,9 @@ def build_product(p):
         seller = ("Sélectionné par <strong>Cohesif Energy</strong>, vendu par <strong>Cohesif Commerce</strong>, société du Groupe Cohesif. "
                   "Gratuit et sans engagement.")
         help_txt = "Besoin d'aide pour choisir ? Un conseiller dimensionne votre projet gratuitement"
+    # Produit achetable : une question doit trouver sa réponse tout de suite, pas dans 48 h
+    help_href = whatsapp_url(p) if vendu else "./contact-devis.html"
+    help_attrs = ' target="_blank" rel="noopener noreferrer"' if vendu else ""
     points = "".join(f"<li>{icon('check', 18, 2.5)}<span>{e(x)}</span></li>" for x in p["points"])
     specs = "".join(f"<tr><th>{e(k)}</th><td>{e(v)}</td></tr>" for k, v in p["specs"].items())
     others = [o for o in PRODUITS if o is not p]
@@ -723,7 +751,7 @@ def build_product(p):
 
       <a href="{buy_href}" class="btn btn-primary btn-lg btn-block pdp-buy" data-buy-main>{icon('cart' if vendu else 'euro', 18)} {buy_label}</a>
       <p class="pdp-seller">{seller}</p>
-      <a href="./contact-devis.html" class="pdp-help">{icon('phone', 16)} {help_txt}</a>
+      <a href="{help_href}" class="pdp-help"{help_attrs}>{icon('phone', 16)} {help_txt}</a>
 
       <ul class="pdp-reassurance">{reass}</ul>
     </div>
