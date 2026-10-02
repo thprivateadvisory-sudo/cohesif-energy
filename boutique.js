@@ -71,19 +71,24 @@
       deposit.querySelector('[data-deposit-amount]').textContent = eur(Math.round(ttc * pct * 100) / 100, true);
     }
   }
+  // Lien direct vers une version (Google Shopping, publicités) : ?variante=CE-AC7-POSE
+  var wanted = new URLSearchParams(window.location.search).get('variante');
   product.querySelectorAll('input[name="variante"]').forEach(function (r) {
+    if (wanted && r.value === wanted) r.checked = true;
     r.addEventListener('change', render);
   });
   render();
 
-  // === BARRE D'ACHAT MOBILE (apparaît quand le bouton principal sort de l'écran) ===
+  // === BARRE D'ACHAT MOBILE ===
+  // Visible dès l'arrivée tant que le bouton principal n'est pas à l'écran (au-dessus ou en dessous) :
+  // le prix et « Acheter » sont accessibles sans faire défiler la page.
   var sticky = document.querySelector('[data-sticky-buy]');
   if (sticky && buyMain && 'IntersectionObserver' in window) {
     var footer = document.querySelector('.footer');
-    var buyVisible = true, footerVisible = false;
+    var buyVisible = false, footerVisible = false;
     function update() { sticky.classList.toggle('visible', !buyVisible && !footerVisible); }
     new IntersectionObserver(function (entries) {
-      buyVisible = entries[0].isIntersecting || entries[0].boundingClientRect.top > 0;
+      buyVisible = entries[0].isIntersecting;
       update();
     }).observe(buyMain);
     if (footer) {

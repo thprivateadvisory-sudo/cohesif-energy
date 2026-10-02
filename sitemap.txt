@@ -1,5 +1,4 @@
 https://cohesifenergy.fr/
-https://cohesifenergy.fr/index.html
 https://cohesifenergy.fr/bornes-recharge.html
 https://cohesifenergy.fr/bornes-particuliers.html
 https://cohesifenergy.fr/bornes-coproprietes.html
@@ -15,9 +14,6 @@ https://cohesifenergy.fr/professionnels.html
 https://cohesifenergy.fr/le-groupe.html
 https://cohesifenergy.fr/normes-certifications.html
 https://cohesifenergy.fr/contact-devis.html
-https://cohesifenergy.fr/mentions-legales.html
-https://cohesifenergy.fr/politique-confidentialite.html
-https://cohesifenergy.fr/cookies.html
 https://cohesifenergy.fr/boutique.html
 https://cohesifenergy.fr/boutique-borne-recharge-7kw.html
 https://cohesifenergy.fr/boutique-borne-recharge-22kw.html
