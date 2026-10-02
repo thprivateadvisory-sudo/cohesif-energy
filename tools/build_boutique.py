@@ -6,7 +6,8 @@
 Produit :
   - boutique.html                    (catalogue)
   - boutique-*.html                  (une page par produit)
-  - sitemap.xml                      (ajoute les URL boutique si absentes)
+  - sitemap.xml / sitemap.txt        (URL boutique avec leurs images, date mise à jour)
+  - google-merchant-feed.xml         (flux produits Google Merchant Center / Shopping gratuit)
   - ../Cohesif-commerce/data/catalogues/cohesif-energy.json (copie lue par la page de commande)
 
 L'en-tête et le pied de page sont repris de bornes-recharge.html pour rester
@@ -30,9 +31,9 @@ JINGSUN = "Jingsun New Energy and Technology (Hefei, Chine)"
 # Libellés propres à chaque gamme (données structurées, fiche produit)
 GAMMES = {
     "ac": {"categorie": "Borne de recharge pour véhicule électrique", "marque": "Hyperwatt", "fabricant": HYPERWATT,
-           "legende": "Choisissez votre formule", "pourquoi": "Pourquoi cette borne", "dispo": "MadeToOrder"},
+           "legende": "Choisissez votre formule", "pourquoi": "Pourquoi cette borne", "dispo": "InStock"},
     "dc": {"categorie": "Borne de recharge pour véhicule électrique", "marque": "Hyperwatt", "fabricant": HYPERWATT,
-           "legende": "Choisissez la puissance", "pourquoi": "Pourquoi cette borne", "dispo": "MadeToOrder"},
+           "legende": "Choisissez la puissance", "pourquoi": "Pourquoi cette borne", "dispo": "InStock"},
     "batterie": {"categorie": "Batterie lithium LiFePO4", "marque": None, "fabricant": None,
                  "legende": "Votre batterie", "pourquoi": "Pourquoi cette batterie", "dispo": "InStock"},
     "stockage": {"categorie": "Batterie de stockage solaire LiFePO4", "marque": "Jingsun", "fabricant": JINGSUN,
@@ -121,7 +122,7 @@ def icon(name, size=18, sw=2):
             f'stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICON[name]}</svg>')
 
 
-def head(title, desc, path, image, jsonld):
+def head(title, desc, path, image, jsonld, og_type="website", extra_meta=""):
     url = f"{SITE}/{path}"
     blocks = "\n".join(
         f'  <script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>' for j in jsonld)
@@ -134,12 +135,12 @@ def head(title, desc, path, image, jsonld):
   <meta name="description" content="{e(desc)}" />
   <meta property="og:title" content="{e(title)}" />
   <meta property="og:description" content="{e(desc)}" />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="{og_type}" />
   <meta property="og:url" content="{url}" />
   <meta property="og:locale" content="fr_FR" />
   <meta property="og:site_name" content="Cohesif Energy" />
-  <meta property="og:image" content="{SITE}/{image}" />
-  <meta name="robots" content="index, follow" />
+  <meta property="og:image" content="{SITE}/{image}" />{extra_meta}
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <link rel="canonical" href="{url}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -148,6 +149,7 @@ def head(title, desc, path, image, jsonld):
   <link rel="stylesheet" href="./boutique.css" />
   <meta name="author" content="Cohesif Energy" />
   <meta name="theme-color" content="#0f7c4a" />
+  <meta name="geo.region" content="FR" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{e(title)}" />
   <meta name="twitter:description" content="{e(desc)}" />
@@ -315,25 +317,33 @@ def build_boutique():
     min_ac = min(prix_min(p) for p in ac)
     min_bat = min(prix_min(p) for p in bat)
     itemlist = {
-        "@context": "https://schema.org", "@type": "ItemList", "name": "Boutique Cohesif Energy — bornes de recharge et batteries",
-        "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/{p['slug']}.html", "name": p["nom"]}
-                            for i, p in enumerate(PRODUITS)]}
-    title = "Boutique bornes de recharge, batteries et solaire — achat en ligne | Cohesif Energy"
-    desc = (f"Achetez votre borne de recharge en ligne dès {round(min_ac)} € TTC : 7 kW, 22 kW, bornes rapides DC jusqu'à 240 kW. "
-            f"Batteries lithium LiFePO4 dès {round(min_bat)} € TTC, panneaux solaires, onduleurs hybrides et batteries de stockage. Paiement sécurisé, garantie 2 ans.")
-    out = head(title, desc, "boutique.html", "img/boutique/gamme.webp", [itemlist, faq_ld(FAQ_BOUTIQUE)])
+        "@context": "https://schema.org", "@type": "CollectionPage", "@id": f"{SITE}/boutique.html#page",
+        "url": f"{SITE}/boutique.html", "name": "Boutique en ligne Cohesif Energy", "inLanguage": "fr-FR",
+        "isPartOf": {"@id": f"{SITE}/#website"}, "about": {"@id": f"{SITE}/#organization"},
+        "mainEntity": {
+            "@type": "ItemList", "name": "Bornes de recharge, batteries et équipements solaires Cohesif Energy",
+            "numberOfItems": len(PRODUITS),
+            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/{p['slug']}.html", "name": p["nom"]}
+                                for i, p in enumerate(PRODUITS)]}}
+    crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Accueil", "item": f"{SITE}/"},
+        {"@type": "ListItem", "position": 2, "name": "Boutique", "item": f"{SITE}/boutique.html"}]}
+    title = f"Boutique Cohesif Energy — Borne de recharge dès {eur(min_ac)}, batteries, solaire"
+    desc = (f"Boutique en ligne Cohesif Energy : borne de recharge dès {eur(min_ac)} TTC (7 et 22 kW), bornes rapides DC jusqu'à 240 kW, "
+            f"batterie lithium LiFePO4 dès {eur(min_bat)} TTC, panneaux solaires et stockage. Livraison offerte partout en France, pose IRVE en option, paiement sécurisé.")
+    out = head(title, desc, "boutique.html", "img/boutique/gamme.webp", [itemlist, crumbs, faq_ld(FAQ_BOUTIQUE)])
     out += f"""
 <section class="shop-hero">
   <div class="container shop-hero-grid">
     <div class="shop-hero-text">
       <div class="eyebrow">Boutique en ligne</div>
-      <h1>Votre borne de recharge, <span class="gradient-text">livrée chez vous</span>, posée si vous le souhaitez.</h1>
+      <h1>Achetez votre borne de recharge en ligne, <span class="gradient-text">livrée partout en France</span>, posée si vous le souhaitez.</h1>
       <p class="shop-hero-desc">Bornes maison 7 et 22 kW, bornes rapides DC jusqu'à 240 kW pour les professionnels, batteries lithium, panneaux solaires, onduleurs hybrides et stockage d'énergie. Paiement sécurisé en quelques clics, conseil gratuit par nos experts.</p>
       <nav class="shop-cats" aria-label="Rayons de la boutique">{shop_cats(ac, dc, bat)}
       </nav>
     </div>
     <div class="shop-hero-visual">
-      <img src="./img/boutique/gamme.webp" alt="Gamme de bornes de recharge AC et DC" width="1400" height="1187" />
+      <img src="./img/boutique/gamme.webp" alt="Gamme de bornes de recharge AC et DC de la boutique Cohesif Energy" width="1400" height="1187" fetchpriority="high" />
     </div>
   </div>
   <div class="container">{trust_strip()}</div>
@@ -603,6 +613,40 @@ def product_faq(p):
     ]
 
 
+def delai_jours(p):
+    """« sous 7 à 12 jours ouvrés » → (7, 12) ; « 6 à 8 semaines » → (42, 56). None si non chiffré."""
+    m = re.search(r"(\d+) à (\d+) (jours|semaines)", p["delai"])
+    if not m:
+        return None
+    k = 7 if m.group(3) == "semaines" else 1
+    return int(m.group(1)) * k, int(m.group(2)) * k
+
+
+def shipping_ld(p):
+    """Livraison offerte / incluse en France métropolitaine (Google : prix, zone et délai de livraison)."""
+    d = delai_jours(p)
+    ship = {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "EUR"},
+        "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "FR"},
+    }
+    if d:
+        ship["deliveryTime"] = {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {"@type": "QuantitativeValue", "minValue": d[0], "maxValue": d[1], "unitCode": "DAY"},
+            "transitTime": {"@type": "QuantitativeValue", "minValue": 1, "maxValue": 3, "unitCode": "DAY"},
+        }
+    return ship
+
+
+# Rétractation de 14 jours pour les produits vendus aux particuliers (prix TTC)
+RETOUR_LD = {
+    "@type": "MerchantReturnPolicy", "applicableCountry": "FR",
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": 14, "returnMethod": "https://schema.org/ReturnByMail",
+}
+
+
 def build_product(p):
     # Sélection par défaut : la variante la moins chère, cohérente avec le « à partir de » des cartes
     vendu = a_prix(p)
@@ -613,15 +657,23 @@ def build_product(p):
     g = GAMMES[p["gamme"]]
     offers = []
     for v in (p["variantes"] if a_prix(p) else []):
-        offers.append({
+        offer = {
             "@type": "Offer", "sku": v["id"], "name": f"{p['nom']} — {v['label']}",
             "price": f"{ttc(p, v['prix']):.2f}", "priceCurrency": "EUR",
-            "availability": f"https://schema.org/{g['dispo']}", "url": url,
-            "seller": {"@type": "Organization", "name": DATA["vendeur"]},
-        })
+            "itemCondition": "https://schema.org/NewCondition",
+            "availability": f"https://schema.org/{g['dispo']}", "url": f"{url}?variante={v['id']}",
+            "areaServed": {"@type": "Country", "name": "France"},
+            "shippingDetails": shipping_ld(p),
+            "seller": {"@type": "Organization", "name": DATA["vendeur"], "url": "https://cohesifcommerce.fr"},
+        }
+        if p["affichage"] == "TTC":
+            offer["hasMerchantReturnPolicy"] = RETOUR_LD
+        offers.append(offer)
     product_ld = {
-        "@context": "https://schema.org", "@type": "Product", "name": p["nom"], "description": p["accroche"],
+        "@context": "https://schema.org", "@type": "Product", "@id": f"{url}#produit", "url": url,
+        "name": p["nom"], "description": f"{p['accroche']} {' '.join(x.rstrip('.') + '.' for x in p['points'])}",
         "image": [f"{SITE}/{img}" for img in p["galerie"]], "sku": rec["id"],
+        "additionalProperty": [{"@type": "PropertyValue", "name": k, "value": v} for k, v in p["specs"].items()],
     }
     if g["marque"]:
         product_ld["brand"] = {"@type": "Brand", "name": g["marque"]}
@@ -634,17 +686,23 @@ def build_product(p):
         {"@type": "ListItem", "position": 3, "name": p["nom"], "item": url}]}
     faq = product_faq(p)
     if vendu:
-        price_txt = f"dès {round(prix_min(p))} € {tax}"
+        price_txt = f"dès {eur(prix_min(p))} {tax}"
         title = f"{p['nom']} — {price_txt}, achat en ligne | Cohesif Energy"
-        desc = f"{p['accroche']} {p['livraison']}. {p['garantie']}. Paiement sécurisé."
+        desc = f"{p['nom']} {price_txt}. {p['accroche']} {p['livraison']}. {p['garantie']}. Paiement sécurisé."
+        prix_og = ttc(p, prix_min(p))
+        meta = (f'\n  <meta property="product:price:amount" content="{prix_og:.2f}" />'
+                f'\n  <meta property="product:price:currency" content="EUR" />'
+                f'\n  <meta property="product:availability" content="in stock" />'
+                f'\n  <meta property="product:condition" content="new" />')
     else:
         title = f"{p['nom']} — prix et fiche technique | Cohesif Energy"
         desc = f"{p['accroche']} {p['livraison']}. {p['garantie']}. Votre prix sous 48 h."
-    out = head(title, desc, f"{p['slug']}.html", p["image"], [product_ld, crumbs, faq_ld(faq)])
+        meta = ""
+    out = head(title, desc, f"{p['slug']}.html", p["image"], [product_ld, crumbs, faq_ld(faq)], "product", meta)
 
     thumbs = "".join(
-        f'<button type="button" class="gallery-thumb{" active" if i == 0 else ""}" data-gallery-thumb="./{g}" aria-label="Photo {i + 1}">'
-        f'<img src="./{g}" alt="" loading="lazy" /></button>' for i, g in enumerate(p["galerie"]))
+        f'<button type="button" class="gallery-thumb{" active" if i == 0 else ""}" data-gallery-thumb="./{img}" aria-label="Photo {i + 1}">'
+        f'<img src="./{img}" alt="{e(p["nom"])}, photo {i + 1}" loading="lazy" width="76" height="76" /></button>' for i, img in enumerate(p["galerie"]))
 
     vopts = []
     for v in p["variantes"]:
@@ -729,7 +787,7 @@ def build_product(p):
     <div class="pdp-gallery">
       <div class="gallery-main">
         <span class="product-badge">{e(p['badge'])}</span>
-        <img src="./{p['image']}" alt="{e(p['nom'])}" data-gallery-main width="1000" height="1000" />
+        <img src="./{p['image']}" alt="{e(p['nom'])} — {e(g['categorie'].lower())}" data-gallery-main width="1000" height="1000" fetchpriority="high" />
       </div>
       <div class="gallery-thumbs">{thumbs}</div>
     </div>
@@ -803,23 +861,71 @@ def build_product(p):
 
 
 def update_sitemap():
+    """Réécrit les entrées boutique du sitemap (date du catalogue + images produits pour Google Images)."""
     path = ROOT / "sitemap.xml"
     xml = path.read_text(encoding="utf-8")
-    urls = ["boutique.html"] + [f"{p['slug']}.html" for p in PRODUITS]
+    if "xmlns:image" not in xml:
+        xml = xml.replace('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+                          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+                          'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">')
+    pages = [("boutique.html", "0.9", ["img/boutique/gamme.webp"])] + [
+        (f"{p['slug']}.html", "0.8", p["galerie"]) for p in PRODUITS]
+    for u, _, _ in pages:
+        xml = re.sub(rf"[ \t]*<url><loc>{re.escape(f'{SITE}/{u}')}</loc>.*?</url>\n", "", xml, flags=re.S)
     add = ""
-    for u in urls:
-        loc = f"{SITE}/{u}"
-        if loc not in xml:
-            prio = "0.9" if u == "boutique.html" else "0.8"
-            add += (f"  <url><loc>{loc}</loc><lastmod>{DATA['misAJour']}</lastmod>"
-                    f"<priority>{prio}</priority><changefreq>weekly</changefreq></url>\n")
-    if add:
-        path.write_text(xml.replace("</urlset>", add + "</urlset>"), encoding="utf-8")
+    for u, prio, imgs in pages:
+        images = "".join(f"<image:image><image:loc>{SITE}/{i}</image:loc></image:image>" for i in imgs)
+        add += (f"  <url><loc>{SITE}/{u}</loc><lastmod>{DATA['misAJour']}</lastmod>"
+                f"<changefreq>weekly</changefreq><priority>{prio}</priority>{images}</url>\n")
+    path.write_text(xml.replace("</urlset>", add + "</urlset>"), encoding="utf-8")
     txt = ROOT / "sitemap.txt"
     lines = txt.read_text(encoding="utf-8").split()
-    new = [f"{SITE}/{u}" for u in urls if f"{SITE}/{u}" not in lines]
+    new = [f"{SITE}/{u}" for u, _, _ in pages if f"{SITE}/{u}" not in lines]
     if new:
         txt.write_text("\n".join(lines + new) + "\n", encoding="utf-8")
+
+
+def build_feed():
+    """Flux Google Merchant Center (fiches gratuites Google Shopping) : une ligne par version achetable, prix TTC."""
+    dispo = {"InStock": "in_stock", "PreOrder": "preorder", "BackOrder": "backorder"}
+    items = []
+    for p in PRODUITS:
+        if not a_prix(p):
+            continue
+        g = GAMMES[p["gamme"]]
+        d = delai_jours(p)
+        for v in p["variantes"]:
+            titre = p["nom"] + (f" — {v['label']}" if len(p["variantes"]) > 1 else "")
+            desc = f"{p['accroche']} {v['detail']}. " + " ".join(x.rstrip(".") + "." for x in p["points"])
+            extra = "".join(f"\n      <g:additional_image_link>{SITE}/{i}</g:additional_image_link>" for i in p["galerie"][1:])
+            brand = f"\n      <g:brand>{e(g['marque'])}</g:brand>" if g["marque"] else ""
+            delai = (f"\n      <g:min_handling_time>{d[0]}</g:min_handling_time><g:max_handling_time>{d[1]}</g:max_handling_time>"
+                     if d else "")
+            items.append(f"""    <item>
+      <g:id>{v['id']}</g:id>
+      <g:item_group_id>{p['slug']}</g:item_group_id>
+      <g:title>{e(titre)}</g:title>
+      <g:description>{e(desc)}</g:description>
+      <g:link>{SITE}/{p['slug']}.html?variante={v['id']}</g:link>
+      <g:image_link>{SITE}/{p['image']}</g:image_link>{extra}
+      <g:availability>{dispo.get(g['dispo'], 'in_stock')}</g:availability>
+      <g:price>{ttc(p, v['prix']):.2f} EUR</g:price>
+      <g:condition>new</g:condition>{brand}
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:product_type>{e(g['categorie'])}</g:product_type>
+      <g:shipping><g:country>FR</g:country><g:price>0.00 EUR</g:price></g:shipping>{delai}
+    </item>""")
+    feed = f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>Boutique Cohesif Energy</title>
+    <link>{SITE}/boutique.html</link>
+    <description>Bornes de recharge, batteries lithium et équipements solaires — livraison partout en France</description>
+{chr(10).join(items)}
+  </channel>
+</rss>
+"""
+    (ROOT / "google-merchant-feed.xml").write_text(feed, encoding="utf-8")
 
 
 def sync_commerce():
@@ -840,4 +946,5 @@ if __name__ == "__main__":
     for prod in PRODUITS:
         build_product(prod)
     update_sitemap()
+    build_feed()
     print(f"Boutique générée : {len(PRODUITS)} produits.")
