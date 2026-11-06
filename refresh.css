@@ -1,0 +1,321 @@
+/* ========================================
+   COHESIF ENERGY — COUP DE NEUF VISUEL
+   Calque purement esthétique, chargé après main.css et boutique.css.
+   Aucun texte, lien, prix ni structure n'est modifié.
+   ======================================== */
+
+:root {
+  --brand-400: #34d399;
+  --glow-brand: 0 10px 30px -10px rgba(15, 124, 74, 0.45);
+  --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.10);
+  --shadow-lift: 0 2px 4px rgba(15, 23, 42, 0.04), 0 24px 48px -20px rgba(12, 94, 56, 0.28);
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+body { color: var(--ink-800); text-rendering: optimizeLegibility; }
+::selection { background: var(--brand-200); color: var(--ink-900); }
+h1, h2 { letter-spacing: -0.03em; }
+h2 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* --- En-tête : plus fin, verre dépoli --- */
+.header {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 6px 20px -16px rgba(15, 23, 42, 0.25);
+}
+@media (min-width: 1024px) { .header-inner { height: 80px; } }
+.nav-desktop a { border-radius: 999px; }
+.nav-desktop a.active { background: var(--brand-50); }
+.nav-desktop a.nav-shop { border-radius: 999px; }
+
+/* --- Boutons : pilule, dégradé, halo --- */
+.btn { border-radius: 999px; font-weight: 600; }
+.btn-sm, .btn-lg { border-radius: 999px; }
+.btn-primary {
+  background: linear-gradient(135deg, #12925a 0%, var(--brand-700) 100%);
+  box-shadow: var(--glow-brand), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0f7c4a 0%, var(--brand-800) 100%);
+  box-shadow: 0 14px 34px -10px rgba(15, 124, 74, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(15, 23, 42, 0.10);
+}
+.btn-outline:hover { border-color: var(--brand-200); background: white; transform: translateY(-1px); }
+.header-shop-mobile { border-radius: 999px; background: linear-gradient(135deg, #12925a, var(--brand-700)); }
+
+/* --- Pastilles & surtitres --- */
+.eyebrow {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(236, 253, 245, 0.9);
+  border: 1px solid var(--brand-100);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-size: 11.5px;
+}
+.eyebrow::before {
+  width: 6px; height: 6px;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+.section-dark .eyebrow, .cta-band .eyebrow {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(52, 211, 153, 0.25);
+  color: var(--brand-400);
+}
+
+/* --- Hero : lueurs plus présentes + trame discrète --- */
+.hero {
+  background-color: #fbfdfc;
+  background-image:
+    radial-gradient(60% 50% at 15% 10%, rgba(16, 185, 129, 0.16) 0%, transparent 70%),
+    radial-gradient(50% 45% at 90% 0%, rgba(59, 130, 246, 0.10) 0%, transparent 70%),
+    radial-gradient(40% 40% at 50% 100%, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 75%);
+  pointer-events: none;
+}
+.hero > * { position: relative; }
+.hero-title .eyebrow { width: fit-content; margin-left: auto; margin-right: auto; }
+.hero-title .gradient-text,
+.gradient-text {
+  background: linear-gradient(120deg, var(--brand-700) 0%, #12925a 45%, var(--brand-500) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.hero-shop a {
+  border-color: rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  background: rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.hero-shop a:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.hero-trust-item {
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+/* --- Sections --- */
+.section-subtle {
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(16, 185, 129, 0.05), transparent 70%),
+    #f6f8f7;
+}
+.section-intro p { color: var(--ink-500); }
+
+/* --- Cartes --- */
+.feature-card,
+.testimonial-card,
+.founder-card {
+  border-color: rgba(15, 23, 42, 0.07);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.feature-card:hover,
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--brand-200);
+}
+.feature-card-subtle { background: white; }
+.feature-card.highlighted {
+  background: linear-gradient(180deg, #ecfdf5 0%, white 70%);
+  box-shadow: 0 0 0 1px var(--brand-200), var(--shadow-soft);
+}
+.feature-card-icon,
+.process-step-icon {
+  background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+  border-color: rgba(16, 185, 129, 0.25);
+  box-shadow: inset 0 1px 0 white, 0 4px 10px -4px rgba(15, 124, 74, 0.35);
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+.feature-card:hover .feature-card-icon {
+  background: linear-gradient(145deg, #12925a, var(--brand-700));
+  color: white;
+  transform: scale(1.06) rotate(-4deg);
+}
+.feature-card-link svg { transition: transform 0.2s ease; }
+.feature-card:hover .feature-card-link svg { transform: translateX(3px); }
+
+/* Grille « 4 engagements » : centrée quand il y a 3 cartes */
+@media (min-width: 1024px) {
+  .feature-grid-4:has(> :nth-child(3):last-child) {
+    grid-template-columns: repeat(3, minmax(0, 300px));
+    justify-content: center;
+  }
+}
+
+/* --- Chiffres clés --- */
+.stats {
+  gap: 0;
+  background: white;
+  border-color: rgba(15, 23, 42, 0.07);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+}
+.stat-item { position: relative; background: transparent; }
+@media (min-width: 640px) {
+  .stat-item + .stat-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 24%; bottom: 24%;
+    width: 1px;
+    background: linear-gradient(transparent, var(--ink-200), transparent);
+  }
+}
+.stat-value {
+  background: linear-gradient(120deg, var(--ink-900) 10%, var(--brand-700) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+}
+
+/* --- Zone d'intervention --- */
+.zone-list li {
+  border-color: rgba(15, 23, 42, 0.07);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  border-left: 3px solid var(--brand-500);
+  transition: transform 0.2s ease;
+}
+.zone-list li:hover { transform: translateX(3px); }
+
+/* --- FAQ --- */
+.faq-item {
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  border-radius: 16px;
+  background: white;
+  margin-bottom: 10px;
+  padding: 0 20px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.faq-item:first-child { border-top: 1px solid rgba(15, 23, 42, 0.07); }
+.faq-item:hover { border-color: var(--brand-200); }
+.faq-item.open { border-color: var(--brand-200); box-shadow: var(--shadow-soft); }
+.faq-item.open .faq-answer { padding-right: 36px; }
+.faq-icon { border-color: var(--ink-200); background: var(--ink-50); }
+
+/* --- Témoignages --- */
+.testimonial-card { position: relative; overflow: hidden; }
+.testimonial-card::before {
+  content: '\201C';
+  position: absolute;
+  top: 6px; right: 22px;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 88px;
+  line-height: 1;
+  color: var(--brand-100);
+  pointer-events: none;
+}
+.testimonial-text { font-style: normal; color: var(--ink-700); }
+.testimonial-avatar { box-shadow: 0 0 0 3px white, 0 0 0 4px var(--brand-200); }
+
+/* --- Bandeau d'appel à l'action --- */
+.cta-band {
+  background:
+    radial-gradient(50% 80% at 100% 0%, rgba(16, 185, 129, 0.35), transparent 70%),
+    radial-gradient(40% 70% at 0% 100%, rgba(59, 130, 246, 0.18), transparent 70%),
+    linear-gradient(160deg, #052e1f 0%, var(--ink-950) 60%);
+  box-shadow: 0 40px 80px -40px rgba(5, 46, 31, 0.6);
+}
+.cta-band::before { opacity: 0.6; }
+.cta-band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  pointer-events: none;
+}
+.cta-band > * { position: relative; z-index: 1; }
+
+/* --- Partenaires --- */
+.logo-ticker-item img { filter: grayscale(100%) opacity(0.5); }
+
+/* --- Pied de page --- */
+.footer {
+  background:
+    radial-gradient(40% 60% at 10% 0%, rgba(16, 185, 129, 0.10), transparent 70%),
+    var(--ink-950);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* --- Alertes & tableaux --- */
+.alert { border-radius: 14px; }
+.table { border-radius: 16px; box-shadow: var(--shadow-soft); border-color: rgba(15, 23, 42, 0.07); }
+.table tbody tr:hover td { background: #f7fbf9; }
+
+/* ===== BOUTIQUE ===== */
+.shop-hero {
+  background:
+    radial-gradient(900px 420px at 85% 10%, rgba(16, 185, 129, 0.16), transparent 70%),
+    radial-gradient(700px 360px at 0% 100%, rgba(59, 130, 246, 0.07), transparent 70%),
+    linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%);
+  border-bottom-color: rgba(15, 23, 42, 0.06);
+}
+.shop-cat {
+  border-color: rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.shop-cat:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.shop-hero-visual img { box-shadow: 0 40px 80px -30px rgba(12, 94, 56, 0.35), 0 0 0 1px rgba(15, 23, 42, 0.05); }
+.shop-trust li { border-radius: 16px; border-color: rgba(15, 23, 42, 0.07); box-shadow: var(--shadow-soft); }
+
+/* Accessibilité : on respecte la préférence « réduire les animations » */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+
+/* Fiches produits */
+.product-card {
+  border-color: rgba(15, 23, 42, 0.07) !important;
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); border-color: var(--brand-200) !important; }
+.product-card-media { background: radial-gradient(70% 70% at 50% 40%, #ffffff 0%, #f1f5f4 100%); }
+.product-card-media img { transition: transform 0.4s cubic-bezier(.2,.8,.2,1); }
+.product-card:hover .product-card-media img { transform: scale(1.04); }
+.product-badge { border-radius: 999px; backdrop-filter: blur(6px); }
+.gallery-main { border-radius: 22px; box-shadow: var(--shadow-soft); }
+.gallery-thumb { border-radius: 12px; }
+.pdp-buy, .pose-box, .variant { border-radius: 18px; }
+.sticky-buy { backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); }
+.pro-band {
+  background:
+    radial-gradient(50% 80% at 100% 0%, rgba(16, 185, 129, 0.30), transparent 70%),
+    linear-gradient(160deg, #052e1f 0%, var(--ink-950) 60%) !important;
+}
+
+/* Mobile : badges de confiance compacts, comme avant */
+@media (max-width: 767px) {
+  .hero-trust-item { padding: 0; background: none; border: 0; }
+}
