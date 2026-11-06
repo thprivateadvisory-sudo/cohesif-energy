@@ -155,7 +155,10 @@ def head(title, desc, path, image, jsonld, og_type="website", extra_meta=""):
   <meta name="twitter:title" content="{e(title)}" />
   <meta name="twitter:description" content="{e(desc)}" />
   <meta name="twitter:image" content="{SITE}/{image}" />
-  <link rel="icon" type="image/png" href="./logo.png" />
+  <link rel="icon" href="./favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
 {blocks}
 </head>
 <body>
